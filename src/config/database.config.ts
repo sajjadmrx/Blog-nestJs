@@ -8,7 +8,8 @@ export const DATABASE_CONFIG: TypeOrmModuleOptions = {
   username: 'root',
   password: '',
   database: 'nestjs-Blog',
-  entities: ['src/**/*.entity{.ts,.js}'],
-  synchronize: false, //@ TODO: Read Docs about this
+  entities: ["dist/**/*.entity.js"],
+  synchronize: false, //* Auto create table
   logging: true,
+  migrationsRun: true
 }
