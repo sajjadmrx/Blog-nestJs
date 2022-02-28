@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable, BadRequestException, UnauthorizedException } from "@nestjs/common";
 import { UserEntity } from "../user/model/user.entity";
 import { UserService } from "../user/user.service";
 import { SignInDto } from "./model/signin.dto";
@@ -32,10 +32,24 @@ export class AuthService {
 
 
 
-    return this.jwtSingUserId(createdUser.id);
+    return this.jwtSignUserId(createdUser.id);
   }
 
-  jwtSingUserId(userId: number): object {
+
+  async signIn(user: SignInDto): Promise<object> {
+    const userExist = await this.userService.findOneByUsername(user.username);
+    if (!userExist)
+      throw new UnauthorizedException('invalid credentials');
+
+    const passwordIsMatch = await bcrypt.compare(user.password, userExist.password);
+    if (!passwordIsMatch)
+      throw new UnauthorizedException('invalid credentials');
+
+    return this.jwtSignUserId(userExist.id);
+  }
+
+
+  jwtSignUserId(userId: number): object {
     return {
       access_token: this.jwtService.sign({ userId })
     }
