@@ -4,6 +4,7 @@ import { UserService } from "../user/user.service";
 import { SignInDto } from "./model/signin.dto";
 
 import * as bcrypt from "bcrypt";
+import { SignUpDto } from "./model/signup.dto";
 
 @Injectable()
 export class AuthService {
@@ -12,7 +13,7 @@ export class AuthService {
   ) { }
 
 
-  async signUp(user: SignInDto) {
+  async signUp(user: SignUpDto) {
 
 
     const usersExist = await this.userService.findByEmailOrUsername(user.email, user.username);

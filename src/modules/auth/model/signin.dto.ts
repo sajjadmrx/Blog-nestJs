@@ -1,14 +1,15 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 //* DTO (Data Transfer Object)
 export class SignInDto {
 
-  @IsNotEmpty()
-  username?: string;
 
-  @IsEmail()
+  @IsString()
   @IsNotEmpty()
-  email?: string;
+  username: string;
 
+  @IsString()
   @IsNotEmpty()
-  password?: string;
+  password: string;
+
+
 }
