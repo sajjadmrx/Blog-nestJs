@@ -22,9 +22,12 @@ export class UserEntity implements IUser {
   @Column({ default: false })
   isAdmin: boolean;
 
-  @Column({ default: Date.now() })
+
+  // createdAt:Date
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ default: Date.now() })
+  // updatedAt:Date
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 }
