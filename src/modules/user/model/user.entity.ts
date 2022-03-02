@@ -28,6 +28,6 @@ export class UserEntity implements IUser {
   createdAt: Date;
 
   // updatedAt:Date
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 }
