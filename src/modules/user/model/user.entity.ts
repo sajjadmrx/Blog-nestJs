@@ -1,10 +1,11 @@
+import { IUser } from 'src/common/interfaces/user.interface';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 
 @Entity('users')
-export class UserEntity {
+export class UserEntity implements IUser {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
 
   @Column({ unique: true })
