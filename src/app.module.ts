@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DATABASE_CONFIG } from './config/database.config';
 import { AuthModule } from './modules/auth/auth.module';
+import { PostModule } from './modules/post/post.module';
 import { UserModule } from './modules/user/user.module';
 
 
@@ -11,7 +12,8 @@ import { UserModule } from './modules/user/user.module';
   imports: [
     TypeOrmModule.forRoot(DATABASE_CONFIG),
     AuthModule,
-    UserModule
+    UserModule,
+    PostModule
   ],
   controllers: [],
   providers: [],
