@@ -19,4 +19,12 @@ export class UserEntity implements IUser {
   @Column({ select: true })
   password: string;
 
+  @Column({ default: false })
+  isAdmin: boolean;
+
+  @Column({ default: Date.now() })
+  createdAt: Date;
+
+  @Column({ default: Date.now() })
+  updatedAt: Date;
 }
