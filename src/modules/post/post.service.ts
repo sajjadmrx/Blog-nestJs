@@ -17,9 +17,14 @@ export class PostService {
     return await this.postRepository.find(1, 10)
   }
 
-  async createPost(post: CreatePostDto): Promise<IPost> {
+  async createPost(post: CreatePostDto, authorId: number): Promise<IPost> {
     await this.validateExistingPost(post.title);
-    return await this.postRepository.create(post as IPost);
+    const newPost: IPost = {
+      authorId: authorId,
+      title: post.title,
+      content: post.content,
+    }
+    return await this.postRepository.create(newPost);
   }
 
 

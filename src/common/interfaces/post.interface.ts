@@ -1,9 +1,9 @@
 export interface IPost {
-  id: number;
+  id?: number;
   title: string;
   content: string;
   authorId: number;
-  isPublished: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  isPublished?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
