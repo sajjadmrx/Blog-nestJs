@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { UserEntity } from './model/user.entity';
 
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { IRepository } from 'src/common/interfaces/repository.interface';
 import { IUser } from 'src/common/interfaces/user.interface';
 
@@ -13,6 +13,7 @@ export class UserRepository implements IRepository<IUser>{
     @InjectRepository(UserEntity)
     private repository: Repository<UserEntity>
   ) { }
+
 
 
   async find(page: number = 1, limit: number = 10): Promise<IUser[]> {
@@ -51,13 +52,16 @@ export class UserRepository implements IRepository<IUser>{
     return this.repository.save(user)
   }
 
-
+  async update(id: number, entity: IUser): Promise<UpdateResult> {
+    return this.repository.update({ id }, { ...entity })
+  }
+  async delete(id: number): Promise<DeleteResult> {
+    return this.repository.delete({ id })
+  }
   // async delete(id: number): Promise<void> {
   //   return this.repository.delete(id)
   // }
 
-  async update(id: number, entity: IUser): Promise<IUser> {
-    return entity
-  }
+
 }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPost } from 'src/common/interfaces/post.interface';
 import { IRepository } from 'src/common/interfaces/repository.interface';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { PostEntity } from './model/post.entity';
 
 
@@ -13,6 +13,9 @@ export class PostRepository implements IRepository<IPost>{
     @InjectRepository(PostEntity)
     private repository: Repository<PostEntity>
   ) { }
+
+
+
 
 
   async find(page: number, limit: number): Promise<IPost[]> {
@@ -34,13 +37,15 @@ export class PostRepository implements IRepository<IPost>{
     return this.repository.save(entity);
   }
 
-
-  async update(id: number, entity: IPost): Promise<IPost> {
-    return entity;
+  async update(id: number, entity: IPost): Promise<UpdateResult> {
+    return this.repository.update({ id: id }, {
+      ...entity
+    });
   }
 
 
-  async deleteById(id: number) {
+
+  delete(id: number): Promise<DeleteResult> {
     return this.repository.delete({ id: id });
   }
 
