@@ -10,6 +10,6 @@ export const DATABASE_CONFIG: TypeOrmModuleOptions = {
   database: 'nestjs-Blog',
   entities: ["dist/**/*.entity.js"],
   synchronize: false, //* Auto create table
-  logging: true,
+  logging: false,
   migrationsRun: true
 }

@@ -8,7 +8,7 @@ import { CommentEntity } from "./model/comment.entity";
 @Injectable()
 export class CommentRepository implements IRepository<IComment> {
   constructor(
-    @InjectRepository(CommentEntity) private repository: Repository<IComment>
+    @InjectRepository(CommentEntity) private repository: Repository<CommentEntity>
   ) { }
 
 
@@ -27,10 +27,10 @@ export class CommentRepository implements IRepository<IComment> {
   update(id: number, entity: IComment): Promise<UpdateResult> {
     return this.repository.update({ id: id }, { ...entity });
   }
+
   delete(id: number): Promise<DeleteResult> {
     return this.repository.delete({ id: id });
   }
-
 
 
 

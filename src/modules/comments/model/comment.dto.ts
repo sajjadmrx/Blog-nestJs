@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Min, MinLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, Min, MinLength } from 'class-validator';
 
 
 export class CommentDto {
@@ -9,4 +9,7 @@ export class CommentDto {
 
   parentId: string;
 
+  @IsNumber()
+  @IsNotEmpty()
+  postId: number;
 }

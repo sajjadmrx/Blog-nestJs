@@ -19,6 +19,9 @@ export class CommentEntity implements IComment {
   @Column()
   userId: number;
 
+  @Column()
+  postId: number;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt?: Date;
 
