@@ -4,7 +4,7 @@ import { PostService } from "./post.service";
 
 
 
-@Controller('api/posts')
+@Controller('posts')
 export class PostController {
   constructor(
     private postService: PostService

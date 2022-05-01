@@ -9,7 +9,7 @@ import { PrismaService } from './modules/prisma/prisma.service';
   const port = process.env.PORT || 3000;
   const app = await NestFactory.create(AppModule)
   app.useGlobalPipes(new ValidationPipe());
-
+  app.setGlobalPrefix("v1/api");
   await app.listen(port)
   console.log(`Server running on ${port}`)
 })()

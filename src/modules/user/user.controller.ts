@@ -6,7 +6,7 @@ import { UserService } from "./user.service";
 
 
 @UseGuards(AuthGuard('jwt')) // set up auth guard for all routes
-@Controller('api/user')
+@Controller('user')
 export class UserController {
 
   constructor(private readonly userService: UserService) { }
