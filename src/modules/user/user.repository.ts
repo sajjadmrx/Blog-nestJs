@@ -1,62 +1,88 @@
 import { Injectable } from '@nestjs/common'
-import { UserEntity } from './model/user.entity';
 
-import { InjectRepository } from '@nestjs/typeorm'
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { IRepository } from 'src/common/interfaces/repository.interface';
-import { IUser } from 'src/common/interfaces/user.interface';
+
+import { IUser, UserCreateInput, UserUpdateInput } from 'src/common/interfaces/user.interface';
+import { Prisma, User } from '@prisma/client';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
 
 @Injectable()
-export class UserRepository implements IRepository<IUser>{
+export class UserRepository {
 
   constructor(
-    @InjectRepository(UserEntity)
-    private repository: Repository<UserEntity>
+    private prisma: PrismaService
   ) { }
 
 
 
-  async find(page: number = 1, limit: number = 10): Promise<IUser[]> {
-    return this.repository.find({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
-  }
-
-  async findById(id: number): Promise<IUser> {
-    return this.repository.findOne({ id })
-  }
-
-  async findOneByEmailAndUsername(email: string, username: string): Promise<IUser> {
-    return this.repository.findOne({ email, username })
-  }
-
-  async findOneByUsername(username: string): Promise<IUser> {
-    return this.repository.findOne({ username })
-  }
-
-  async findOneByEmail(email: string): Promise<IUser> {
-    return this.repository.findOne({ email })
-  }
-
-  async findByEmailOrUsername(email: string, username: string): Promise<IUser[]> {
-    return this.repository.find({
-      where: [
-        { email },
-        { username },
-      ]
+  async find(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.UserWhereUniqueInput;
+    where?: Prisma.UserWhereInput;
+    orderBy?: Prisma.UserOrderByWithRelationInput;
+  }): Promise<IUser[]> {
+    return this.prisma.user.findMany({
+      ...params,
     })
   }
 
-  async create(user: IUser): Promise<IUser> {
-    return this.repository.save(user)
+  async findById(id: number): Promise<IUser | null> {
+    return this.prisma.user.findUnique({
+      where: {
+        id: id
+      }
+    })
   }
 
-  async update(id: number, entity: IUser): Promise<UpdateResult> {
-    return this.repository.update({ id }, { ...entity })
+  async findOneByEmailAndUsername(email: string, username: string): Promise<IUser | null> {
+    return this.prisma.user.findUnique({
+      where: {
+        email,
+        username
+      }
+    })
   }
-  async delete(id: number): Promise<DeleteResult> {
-    return this.repository.delete({ id })
+
+  async findOneByUsername(username: string): Promise<IUser> {
+    return this.prisma.user.findUnique({
+      where: {
+        username
+      }
+    })
+  }
+
+  async findOneByEmail(email: string): Promise<IUser | null> {
+    return this.prisma.user.findUnique({
+      where: {
+        email
+      }
+    })
+  }
+
+  async findByEmailOrUsername(email: string, username: string): Promise<IUser[]> {
+    return this.prisma.user.findMany({
+      where: {
+        OR: [
+          { email },
+          { username }
+        ]
+      }
+    })
+  }
+
+  async create(user: UserCreateInput): Promise<IUser> {
+    return this.prisma.user.create({
+      data: {
+        ...user
+      }
+    })
+  }
+
+  async update(id: number, entity: UserUpdateInput): Promise<IUser> {
+    return this.prisma.user.update({ where: { id: id }, data: entity })
+  }
+  async deleteOneWithId(id: number): Promise<IUser> {
+    return this.prisma.user.delete({ where: { id: id } })
   }
   // async delete(id: number): Promise<void> {
   //   return this.repository.delete(id)

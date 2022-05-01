@@ -3,51 +3,58 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IPost } from 'src/common/interfaces/post.interface';
 import { IRepository } from 'src/common/interfaces/repository.interface';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { PostEntity } from './model/post.entity';
+import { PrismaService } from '../prisma/prisma.service';
 
 
 
 @Injectable()
-export class PostRepository implements IRepository<IPost>{
+export class PostRepository {
   constructor(
-    @InjectRepository(PostEntity)
-    private repository: Repository<PostEntity>
+    private prisma: PrismaService
   ) { }
 
 
 
 
 
-  async find(page: number, limit: number): Promise<IPost[]> {
-    return this.repository.find({
-      skip: (page - 1) * limit,
-      take: limit
+  async find(): Promise<IPost[]> {
+    return this.prisma.post.findMany();
+  }
+
+  async findById(id: number): Promise<IPost | null> {
+    return this.prisma.post.findUnique({
+      where: {
+        id: id
+      }
     })
   }
-  async findById(id: number): Promise<IPost> {
-    return this.repository.findOne({ id: id });
-  }
 
-  async findByTitle(title: string): Promise<IPost> {
-    return this.repository.findOne({ title: title });
-  }
-
-
-  async create(entity: IPost): Promise<IPost> {
-    return this.repository.save(entity);
-  }
-
-  async update(id: number, entity: IPost): Promise<UpdateResult> {
-    return this.repository.update({ id: id }, {
-      ...entity
-    });
-  }
+  // async findByTitle(title: string): Promise<IPost> {
+  //   return this.prisma.post.findUnique({
+  //     where: {
+  //       titl: title
+  //     }
+  //   })
+  // }
 
 
+  // async create(entity: IPost): Promise<IPost> {
+  //   return this.prisma.post.create({
 
-  delete(id: number): Promise<DeleteResult> {
-    return this.repository.delete({ id: id });
-  }
+  //   })
+  // }
+
+  // async update(id: number, entity: IPost): Promise<UpdateResult> {
+  //   return this.repository.update({ id: id }, {
+  //     ...entity
+  //   });
+  // }
+
+
+
+  // delete(id: number): Promise<DeleteResult> {
+  //   return this.repository.delete({ id: id });
+  // }
 
 
 

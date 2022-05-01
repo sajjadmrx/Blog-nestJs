@@ -1,10 +1,10 @@
-export interface IUser {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-  isAdmin: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+import { Prisma, User } from "@prisma/client";
+
+export interface IUser extends User {
+
 }
 
+
+export type UserCreateInput = Prisma.UserCreateInput // Omit<Prisma.UserCreateInput>;
+
+export type UserUpdateInput = Prisma.UserUpdateInput

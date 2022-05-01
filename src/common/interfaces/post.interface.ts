@@ -1,9 +1,3 @@
-export interface IPost {
-  id?: number;
-  title: string;
-  content: string;
-  authorId: number;
-  isPublished?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+import { Post } from "@prisma/client";
+
+export interface IPost extends Post { }
