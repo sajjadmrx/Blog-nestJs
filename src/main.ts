@@ -9,4 +9,5 @@ import { AppModule } from './app.module';
   const app = await NestFactory.create(AppModule)
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(port)
+  console.log(`Server running on ${port}`)
 })()
