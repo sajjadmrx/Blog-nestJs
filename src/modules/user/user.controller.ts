@@ -1,8 +1,10 @@
-import { Controller, Get, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Put, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { getUser } from "src/common/decorators/req-user.decorator";
+import CheckRoleGuard from "src/common/guards/check-roles.guard";
 import { IUser } from "src/common/interfaces/user.interface";
+import { RoleDto } from "./dtos/role.dto";
 import { UserService } from "./user.service";
 
 
@@ -16,7 +18,14 @@ export class UserController {
 
   @Get()
   profile(@getUser<IUser>() user: IUser): IUser {
-    return user
+    return this.userService.getProfile(user)
+  }
+
+
+  @UseGuards(CheckRoleGuard(['ADMIN']))
+  @Put('role')
+  updateRole(@getUser<IUser>() user: IUser, @Body() role: RoleDto) {
+    return this.userService.updateRole(user.id, role.name)
   }
 
 }
