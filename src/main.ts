@@ -8,7 +8,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
   const port = process.env.PORT || 3000;
   const app = await NestFactory.create(AppModule)
   app.useGlobalPipes(new ValidationPipe());
-  app.setGlobalPrefix("v1/api");
+  app.setGlobalPrefix("api/v1");
 
   const config = new DocumentBuilder()
     .setTitle('Blog - NestJS')
