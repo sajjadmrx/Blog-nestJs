@@ -5,12 +5,12 @@ import { SignInDto } from "./dtos/signin.dto";
 import * as bcrypt from "bcrypt";
 import { SignUpDto } from "./dtos/signup.dto";
 import { JwtService } from "@nestjs/jwt";
-import { UserRepository } from "../user/user.repository";
+import { UsersRepository } from "../users/users.repository";
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepository: UserRepository,
+    private userRepository: UsersRepository,
     private jwtService: JwtService
   ) { }
 

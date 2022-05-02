@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { Role } from "@prisma/client";
 import { IUser } from "src/common/interfaces/user.interface";
-import { UserRepository } from "./user.repository";
+import { UsersRepository } from "./users.repository";
 
 
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(
-    private userRepo: UserRepository
+    private userRepo: UsersRepository
   ) { }
 
   getProfile(user: IUser): IUser {
@@ -23,13 +23,12 @@ export class UserService {
       if (!hasRole)
         throw new BadRequestException(`${role} is not a valid role`)
 
-      await this.userRepo.update(userId, {
+      const result = await this.userRepo.update(userId, {
         role: hasRole
       })
-
       return true // TODO: create Response OBject For All Successful Operations
     } catch (error) {
-      throw new InternalServerErrorException()
+      throw new BadRequestException("INVALID_USER_ID")
     }
   }
 
