@@ -17,7 +17,7 @@ export class UsersController {
 
   @Get('/@me')
   @ApiTags("Current User")
-  profile(@getUser<IUser>() user: IUser): IUser {
+  profile(@getUser<IUser>() user: IUser) {
     return this.usersService.getProfile(user)
   }
 
@@ -26,8 +26,8 @@ export class UsersController {
   @ApiTags("Manage User")
   @ApiBadRequestResponse()
   @UseGuards(CheckRoleGuard(['ADMIN']))
-  updateRole(@Param('userId') userId: number, @Body() roleDto: RoleDto): Promise<any> {
-    return this.usersService.updateRole(userId, roleDto.name)
+  updateRole(@Param('userId') userId: string, @Body() roleDto: RoleDto): Promise<any> {
+    return this.usersService.updateRole(Number(userId), roleDto.name)
   }
 
 }

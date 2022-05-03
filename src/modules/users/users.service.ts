@@ -1,8 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, HttpCode, HttpStatus, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { Role } from "@prisma/client";
 import { IUser } from "src/common/interfaces/user.interface";
 import { UsersRepository } from "./users.repository";
-
+import { getResponseMessage } from '../../common/constants/messages.constant'
+import { responseData } from "src/common/functions/response.func";
 
 
 @Injectable()
@@ -11,24 +12,32 @@ export class UsersService {
     private userRepo: UsersRepository
   ) { }
 
-  getProfile(user: IUser): IUser {
+  getProfile(user: IUser) {
     const myUser = user
     delete myUser.password
-    return myUser
+    return responseData({
+      statusCode: "OK",
+      message: getResponseMessage("SUCCESS"),
+      data: myUser
+    })
   }
 
   async updateRole(userId: number, role: string) {
     try {
       const hasRole = Role[role]
       if (!hasRole)
-        throw new BadRequestException(`${role} is not a valid role`)
+        throw new BadRequestException(getResponseMessage("INVALID_ROLE"))
 
-      const result = await this.userRepo.update(userId, {
+      await this.userRepo.update(userId, {
         role: hasRole
       })
-      return true // TODO: create Response OBject For All Successful Operations
+
+      return responseData({
+        statusCode: "OK",
+        message: getResponseMessage("SUCCESS"),
+      })
     } catch (error) {
-      throw new BadRequestException("INVALID_USER_ID")
+      throw new BadRequestException(getResponseMessage("INVALID_USER_ID"))
     }
   }
 

@@ -6,6 +6,8 @@ import * as bcrypt from "bcrypt";
 import { SignUpDto } from "./dtos/signup.dto";
 import { JwtService } from "@nestjs/jwt";
 import { UsersRepository } from "../users/users.repository";
+import { responseData } from "src/common/functions/response.func";
+import { getResponseMessage } from "src/common/constants/messages.constant";
 
 @Injectable()
 export class AuthService {
@@ -48,7 +50,13 @@ export class AuthService {
       if (!passwordIsMatch)
         throw new UnauthorizedException('invalid credentials');
 
-      return this.jwtSignUserId(userExist.id);
+
+      return responseData({
+        statusCode: "OK",
+        message: getResponseMessage("SUCCESS"),
+        data: this.jwtSignUserId(userExist.id)
+      })
+
     } catch (error) {
       throw error
     }
@@ -56,9 +64,13 @@ export class AuthService {
 
 
   jwtSignUserId(userId: number): object {
-    return {
-      access_token: this.jwtService.sign({ userId })
-    }
+
+    return responseData({
+      statusCode: "OK",
+      message: getResponseMessage("SUCCESS"),
+      data: this.jwtService.sign({ userId })
+    })
+
   }
 
 
