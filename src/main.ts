@@ -14,11 +14,10 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
     .setTitle('Blog - NestJS')
     .setDescription('The Blog API description')
     .setVersion('1.0')
-    .addSecurity('jwt', {
-      type: 'apiKey',
-      name: 'Authorization',
-      in: 'header',
-      bearerFormat: 'Bearer '
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT'
     })
     .build();
 
