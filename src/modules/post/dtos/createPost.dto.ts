@@ -22,9 +22,14 @@ export class CreatePostDto {
   })
   content: string;
 
-  file: {
-    type: 'string',
-    format: 'binary',
-  }
+
+  @ApiProperty({
+    description: 'Cover image of the post',
+    example: 'googlelogo_color_272x92dp.png',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  cover: string;
 
 }

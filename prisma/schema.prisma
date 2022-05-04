@@ -36,7 +36,7 @@ model Post {
   author    User      @relation(fields: [authorId], references: [id])
   authorId  Int
   published Boolean
-  conver    String //@default("/images/default-post.png")
+  cover    String //@default("/images/default-post.png")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Comment   Comment[]

@@ -21,6 +21,7 @@ enum responseMessages {
     FILE_IS_REQUIRED = 'FILE_IS_REQUIRED',
     FILE_SIZE_TOO_LARGE = 'FILE_SIZE_TOO_LARGE',
     INVALID_FILE_FORMAT = 'INVALID_FILE_FORMAT',
+    FILE_NOT_EXIST = 'FILE_NOT_EXIST',
 }
 
 export function getResponseMessage(message: keyof typeof responseMessages) {
