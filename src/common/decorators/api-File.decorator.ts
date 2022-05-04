@@ -1,6 +1,6 @@
 import { ApiBody } from '@nestjs/swagger';
 
-export const ApiFile = (fileName: string = 'file'): MethodDecorator => (
+export const ApiFile = (fileName: string = 'file', body: any): MethodDecorator => (
     target: any,
     propertyKey: string,
     descriptor: PropertyDescriptor,
@@ -14,6 +14,7 @@ export const ApiFile = (fileName: string = 'file'): MethodDecorator => (
                     format: 'binary',
                 },
             },
+
         },
     })(target, propertyKey, descriptor);
 };

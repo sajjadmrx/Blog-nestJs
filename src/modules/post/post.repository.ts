@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Prisma } from '@prisma/client';
 import { IPost } from 'src/common/interfaces/post.interface';
 import { IRepository } from 'src/common/interfaces/repository.interface';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
@@ -29,34 +30,11 @@ export class PostRepository {
     })
   }
 
-  // async findByTitle(title: string): Promise<IPost> {
-  //   return this.prisma.post.findUnique({
-  //     where: {
-  //       titl: title
-  //     }
-  //   })
-  // }
-
-
-  // async create(entity: IPost): Promise<IPost> {
-  //   return this.prisma.post.create({
-
-  //   })
-  // }
-
-  // async update(id: number, entity: IPost): Promise<UpdateResult> {
-  //   return this.repository.update({ id: id }, {
-  //     ...entity
-  //   });
-  // }
-
-
-
-  // delete(id: number): Promise<DeleteResult> {
-  //   return this.repository.delete({ id: id });
-  // }
-
-
+  async create(post: Prisma.PostCreateInput): Promise<IPost> {
+    return this.prisma.post.create({
+      data: post
+    })
+  }
 
 
 }
