@@ -18,6 +18,9 @@ enum responseMessages {
     INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
     INVALID_USER_ID = 'INVALID_USER_ID',
     INVALID_ROLE = 'INVALID_ROLE',
+    FILE_IS_REQUIRED = 'FILE_IS_REQUIRED',
+    FILE_SIZE_TOO_LARGE = 'FILE_SIZE_TOO_LARGE',
+    INVALID_FILE_FORMAT = 'INVALID_FILE_FORMAT',
 }
 
 export function getResponseMessage(message: keyof typeof responseMessages) {

@@ -4,6 +4,7 @@ import { DATABASE_CONFIG } from './config/database.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { PostModule } from './modules/post/post.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
+import { UploadModule } from './modules/upload/upload.module';
 import { UserModule } from './modules/users/users.module';
 
 
@@ -13,9 +14,9 @@ import { UserModule } from './modules/users/users.module';
     AuthModule,
     UserModule,
     PostModule,
+    UploadModule
   ],
   controllers: [],
-  providers: [
-  ],
+  providers: [],
 })
 export class AppModule { }
