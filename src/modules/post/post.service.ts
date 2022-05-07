@@ -1,8 +1,9 @@
 import { BadRequestException, HttpCode, HttpStatus, Injectable } from '@nestjs/common';
+import { unlink } from 'fs/promises';
 import { getResponseMessage } from 'src/common/constants/messages.constant';
 import { fileHasExist } from 'src/common/functions/fileValidator.func';
 import { responseData } from 'src/common/functions/response.func';
-import { IPostCreateInput } from 'src/common/interfaces/post.interface';
+import { IPost, IPostCreateInput } from 'src/common/interfaces/post.interface';
 import { CreatePostDto } from './dtos/createPost.dto';
 import { UpdatePostDto } from './dtos/updatePost.dto';
 
@@ -56,6 +57,8 @@ export class PostService {
 
   async update(userId: number, id: number, createPostDto: UpdatePostDto) {
     try {
+
+
       if (createPostDto.cover) {
 
         const hasExist: boolean = await fileHasExist(createPostDto.cover, './uploads/posts'); //TODO : create class for file validator in upload module
@@ -64,13 +67,41 @@ export class PostService {
         }
 
       }
-      await this.postRepository.update(id, createPostDto)
+
+
+      try {
+        await this.postRepository.update(id, createPostDto)
+      } catch (error) {
+        throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"))
+      }
+
+
       return responseData({
         statusCode: "OK",
         message: getResponseMessage("SUCCESS"),
       })
+
+
     } catch (error) {
       throw error
+    }
+  }
+
+  async delete(userId: number, id: number) {
+    try {
+      const post: IPost = await this.postRepository.delete(id)
+      try {
+        await unlink(`./uploads/posts/${post.cover}`)
+      } catch (error) {
+
+      } finally {
+        return responseData({
+          statusCode: "OK",
+          message: getResponseMessage("SUCCESS")
+        })
+      }
+    } catch (error) {
+      throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"))
     }
   }
 

@@ -38,5 +38,14 @@ export class PostController {
     return this.postService.update(userId, Number(id), createPostDto);
   }
 
+  @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(CheckRoleGuard(['ADMIN']))
+  @UseGuards(AuthGuard('jwt'))
+  async deletePost(@getUser('id') userId: number, @Param('id') id: string) {
+    return this.postService.delete(userId, Number(id));
+  }
+
+
 }
 

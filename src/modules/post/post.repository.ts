@@ -44,5 +44,13 @@ export class PostRepository {
     })
   }
 
+  async delete(id: number): Promise<IPost> {
+    return this.prisma.post.delete({
+      where: {
+        id: id
+      }
+    })
+  }
+
 
 }
