@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CreatePostDto {
 
@@ -32,4 +32,11 @@ export class CreatePostDto {
   @IsString()
   cover: string;
 
+  @ApiProperty({
+    description: 'Published of the post',
+    example: true,
+    required: true
+  })
+  @IsBoolean()
+  published: boolean
 }

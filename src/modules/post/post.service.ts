@@ -32,7 +32,7 @@ export class PostService {
 
       const post: IPostCreateInput = {
         ...createPostDto,
-        published: false,
+        //      published: false,
         author: {
           connect: {
             id: userId
