@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Prisma } from '@prisma/client';
-import { IPost } from 'src/common/interfaces/post.interface';
+import { IPost, IPostCreateInput, IPostUpdateInput } from 'src/common/interfaces/post.interface';
 import { IRepository } from 'src/common/interfaces/repository.interface';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { PrismaService } from '../prisma/prisma.service';
@@ -30,8 +30,18 @@ export class PostRepository {
     })
   }
 
-  async create(post: Prisma.PostCreateInput): Promise<IPost> {
+  async create(post: IPostCreateInput): Promise<IPost> {
     return this.prisma.post.create({
+      data: post
+    })
+  }
+
+
+  async update(id: number, post: IPostUpdateInput): Promise<IPost> {
+    return this.prisma.post.update({
+      where: {
+        id: id
+      },
       data: post
     })
   }
