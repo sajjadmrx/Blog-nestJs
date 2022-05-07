@@ -40,7 +40,7 @@ export class PostService {
         cover: createPostDto.cover || "default.png"
       }
 
-      await this.postRepository.create(userId, post)
+      await this.postRepository.create(post)
 
       return responseData({
         statusCode: "CREATED",
