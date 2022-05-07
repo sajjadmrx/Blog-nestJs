@@ -30,10 +30,21 @@ export class PostRepository {
     })
   }
 
-  async create(post: IPostCreateInput): Promise<IPost> {
-    return this.prisma.post.create({
-      data: post
-    })
+  async create(userId: number, post: IPostCreateInput): Promise<IPost> {
+    return this.prisma.post.create(
+      {
+        data: {
+          ...post,
+          author: {
+            connect: {
+              id: userId
+            }
+          },
+          published: false,
+          cover: post.cover
+        }
+      }
+    )
   }
 
 

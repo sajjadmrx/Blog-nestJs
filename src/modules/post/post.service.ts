@@ -2,6 +2,7 @@ import { BadRequestException, HttpCode, HttpStatus, Injectable } from '@nestjs/c
 import { getResponseMessage } from 'src/common/constants/messages.constant';
 import { fileHasExist } from 'src/common/functions/fileValidator.func';
 import { responseData } from 'src/common/functions/response.func';
+import { IPostCreateInput } from 'src/common/interfaces/post.interface';
 import { CreatePostDto } from './dtos/createPost.dto';
 import { UpdatePostDto } from './dtos/updatePost.dto';
 
@@ -18,24 +19,28 @@ export class PostService {
   async create(userId: number, createPostDto: CreatePostDto) {
 
     try {
+
+      //TODO : create class for file validator in upload module
       if (createPostDto.cover) {
 
         const hasExist: boolean = await fileHasExist(createPostDto.cover, './uploads/posts');
         if (!hasExist) {
           throw new BadRequestException(getResponseMessage("FILE_NOT_EXIST"));
         }
-
       }
-      const result = await this.postRepository.create({
+
+      const post: IPostCreateInput = {
+        ...createPostDto,
+        published: false,
         author: {
           connect: {
             id: userId
           }
         },
-        ...createPostDto,
-        published: false,
         cover: createPostDto.cover || "default.png"
-      })
+      }
+
+      await this.postRepository.create(userId, post)
 
       return responseData({
         statusCode: "CREATED",
