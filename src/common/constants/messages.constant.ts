@@ -23,6 +23,8 @@ enum responseMessages {
     INVALID_FILE_FORMAT = 'INVALID_FILE_FORMAT',
     FILE_NOT_EXIST = 'FILE_NOT_EXIST',
     POST_NOT_EXIST = 'POST_NOT_EXIST',
+    CATEGORY_EXIST = 'CATEGORY_EXIST',
+    INVALID_ID = 'INVALID_ID',
 }
 
 export function getResponseMessage(message: keyof typeof responseMessages) {

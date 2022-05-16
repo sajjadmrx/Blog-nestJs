@@ -36,10 +36,18 @@ model Post {
   author    User      @relation(fields: [authorId], references: [id])
   authorId  Int
   published Boolean
-  cover    String //@default("/images/default-post.png")
+  cover     String //@default("/images/default-post.png")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Comment   Comment[]
+}
+
+model Categories {
+  id        Int      @id @unique @default(autoincrement())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Comment {
