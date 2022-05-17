@@ -97,6 +97,9 @@ export class CategoriesService {
 
     async update(id: number, item: updateCategoryDto) {
         try {
+            if (!Number(id))
+                throw new BadRequestException(getResponseMessage("INVALID_ID"))
+
             const exist = await this.categoriesRepository.findBySlug(item.slug);
             if (exist && exist.id !== id)
                 throw new BadRequestException(getResponseMessage("CATEGORY_EXIST"))
