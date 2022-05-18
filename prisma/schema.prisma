@@ -30,24 +30,37 @@ model User {
 }
 
 model Post {
-  id        Int       @id @default(autoincrement())
-  title     String
-  content   String
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  Int
-  published Boolean
-  cover     String //@default("/images/default-post.png")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Comment   Comment[]
+  id         Int                 @id @default(autoincrement())
+  title      String
+  content    String
+  author     User                @relation(fields: [authorId], references: [id])
+  authorId   Int
+  published  Boolean
+  cover      String //@default("/images/default-post.png")
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+  Comment    Comment[]
+  categories CategoriesOnPosts[]
 }
 
-model Categories {
-  id        Int      @id @unique @default(autoincrement())
+model Category {
+  id        Int                 @id @unique @default(autoincrement())
   name      String
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  slug      String              @unique
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  //  Post      Post?    @relation(fields: [postId], references: [id])
+  Post      CategoriesOnPosts[]
+}
+
+model CategoriesOnPosts {
+  post       Post     @relation(fields: [postId], references: [id])
+  postId     Int // relation scalar field (used in the `@relation` attribute above)
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+
+  @@id([postId, categoryId])
 }
 
 model Comment {

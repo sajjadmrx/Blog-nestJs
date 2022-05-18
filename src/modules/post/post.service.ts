@@ -3,12 +3,13 @@ import { unlink } from 'fs/promises';
 import { getResponseMessage } from 'src/common/constants/messages.constant';
 import { fileHasExist } from 'src/common/functions/fileValidator.func';
 import { responseData } from 'src/common/functions/response.func';
-import { IPost, IPostCreateInput } from 'src/common/interfaces/post.interface';
+import { IPost, IPostCreateInput, IPostUpdateInput } from 'src/common/interfaces/post.interface';
 import { CreatePostDto } from './dtos/createPost.dto';
 import { searchPostDto } from './dtos/search.dto';
 import { UpdatePostDto } from './dtos/updatePost.dto';
 
 import { PostRepository } from './post.repository';
+import { getCategoriesData } from './post.utility';
 
 
 @Injectable()
@@ -78,7 +79,6 @@ export class PostService {
 
     try {
 
-      //TODO : create class for file validator in upload module
       if (createPostDto.cover) {
 
         const hasExist: boolean = await fileHasExist(createPostDto.cover, './uploads/posts');
@@ -89,13 +89,15 @@ export class PostService {
 
       const post: IPostCreateInput = {
         ...createPostDto,
-        //      published: false,
         author: {
           connect: {
             id: userId
           }
         },
-        cover: createPostDto.cover || "default.png"
+        cover: createPostDto.cover || "default.png",
+        categories: {
+          create: getCategoriesData(createPostDto.categories),
+        }
       }
 
       await this.postRepository.create(post)
@@ -112,22 +114,35 @@ export class PostService {
 
   }
 
-  async update(userId: number, id: number, createPostDto: UpdatePostDto) {
+  async update(userId: number, id: number, updatePostDto: UpdatePostDto) {
     try {
 
 
-      if (createPostDto.cover) {
+      if (updatePostDto.cover) {
 
-        const hasExist: boolean = await fileHasExist(createPostDto.cover, './uploads/posts'); //TODO : create class for file validator in upload module
+        const hasExist: boolean = await fileHasExist(updatePostDto.cover, './uploads/posts'); //TODO : create class for file validator in upload module
         if (!hasExist) {
           throw new BadRequestException(getResponseMessage("FILE_NOT_EXIST"));
         }
 
       }
 
+      const data: IPostUpdateInput = {
+        ...updatePostDto,
+        //      published: false,
+        author: {
+          connect: {
+            id: userId
+          }
+        },
+        categories: {
+          create: getCategoriesData(updatePostDto.categories),
+        },
+        cover: updatePostDto.cover || "default.png"
+      }
 
       try {
-        await this.postRepository.update(id, createPostDto)
+        await this.postRepository.update(id, data)
       } catch (error) {
         throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"))
       }

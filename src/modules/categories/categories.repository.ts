@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import { ICategory, ICategoryCreateInput, ICategoryUpdateInput } from "src/common/interfaces/categories.interface";
 import { PrismaService } from "../prisma/prisma.service";
 
@@ -7,12 +8,12 @@ export class CategoriesRepository {
     constructor(private prisma: PrismaService) { }
 
     async find() {
-        return this.prisma.categories.findMany()
+        return this.prisma.category.findMany()
     }
 
 
     async findById(id: number) {
-        return this.prisma.categories.findUnique({
+        return this.prisma.category.findUnique({
             where: {
                 id: id,
             }
@@ -21,7 +22,7 @@ export class CategoriesRepository {
 
 
     async findBySlug(slug: string): Promise<ICategory> {
-        return this.prisma.categories.findUnique({
+        return this.prisma.category.findUnique({
             where: {
                 slug: slug,
             }
@@ -29,7 +30,7 @@ export class CategoriesRepository {
     }
 
     async create(input: ICategoryCreateInput): Promise<ICategory> {
-        return this.prisma.categories.create({
+        return this.prisma.category.create({
             data: {
                 name: input.name,
                 slug: input.slug,
@@ -38,7 +39,7 @@ export class CategoriesRepository {
     }
 
     async update(id: number, data: ICategoryUpdateInput): Promise<ICategory> {
-        return this.prisma.categories.update({
+        return this.prisma.category.update({
             where: {
                 id: id,
             },
@@ -47,7 +48,7 @@ export class CategoriesRepository {
     }
 
     async delete(id: number): Promise<ICategory> {
-        return this.prisma.categories.delete({
+        return this.prisma.category.delete({
             where: {
                 id: id,
             }

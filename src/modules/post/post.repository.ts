@@ -37,6 +37,17 @@ export class PostRepository {
             createdAt: true,
             role: true,
           }
+        },
+        categories: {
+          include: {
+            category: {
+              select: {
+                name: true,
+                slug: true,
+
+              }
+            }
+          }
         }
       }
     })
@@ -57,7 +68,8 @@ export class PostRepository {
             role: true,
           },
 
-        }
+        },
+
       }
 
     })

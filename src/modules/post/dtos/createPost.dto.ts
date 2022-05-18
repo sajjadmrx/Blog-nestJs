@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CreatePostDto {
 
@@ -39,4 +39,13 @@ export class CreatePostDto {
   })
   @IsBoolean()
   published: boolean
+
+
+  @ApiProperty({
+    description: 'category of the post',
+    example: [1, 2],
+    required: true
+  })
+  @IsArray()
+  categories: number[];
 }
