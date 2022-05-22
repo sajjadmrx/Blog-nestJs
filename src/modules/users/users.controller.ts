@@ -8,8 +8,8 @@ import { RoleDto } from "./dtos/role.dto";
 import { UsersService } from "./users.service";
 
 
-@ApiBearerAuth('jwt')
 @UseGuards(AuthGuard('jwt')) // set up auth guard for all routes
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
 
@@ -24,7 +24,6 @@ export class UsersController {
 
   @Put('/role/:userId')
   @ApiTags("Manage User")
-  @ApiBadRequestResponse()
   @UseGuards(CheckRoleGuard(['ADMIN']))
   updateRole(@Param('userId') userId: string, @Body() roleDto: RoleDto): Promise<any> {
     return this.usersService.updateRole(Number(userId), roleDto.name)
