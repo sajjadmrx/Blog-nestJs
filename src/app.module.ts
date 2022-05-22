@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common'
 
-import { DATABASE_CONFIG } from './config/database.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { PostModule } from './modules/post/post.module';
