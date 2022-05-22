@@ -76,6 +76,7 @@ export class PostService {
   }
 
   async create(userId: number, createPostDto: CreatePostDto) {
+    //TODO: Refactoring this code
 
     try {
 
@@ -87,8 +88,19 @@ export class PostService {
         }
       }
 
+      let tags: string;
+      try {
+        if (Array.isArray(createPostDto.tags))
+          tags = JSON.stringify(createPostDto.tags)
+        else
+          throw new Error("catch")
+      } catch (error) {
+        throw new BadRequestException(getResponseMessage("TAGS_INVALID"))
+      }
+
       const post: IPostCreateInput = {
         ...createPostDto,
+        tags: JSON.stringify(tags),
         author: {
           connect: {
             id: userId
@@ -97,7 +109,7 @@ export class PostService {
         cover: createPostDto.cover || "default.png",
         categories: {
           create: getCategoriesData(createPostDto.categories),
-        }
+        },
       }
 
       await this.postRepository.create(post)
@@ -116,7 +128,7 @@ export class PostService {
 
   async update(userId: number, id: number, updatePostDto: UpdatePostDto) {
     try {
-
+      //TODO: Refactoring this code
 
       if (updatePostDto.cover) {
 
@@ -127,9 +139,19 @@ export class PostService {
 
       }
 
+      let tags: string;
+      try {
+        if (Array.isArray(updatePostDto.tags))
+          tags = JSON.stringify(updatePostDto.tags)
+        else
+          throw new Error("catch")
+      } catch (error) {
+        throw new BadRequestException(getResponseMessage("TAGS_INVALID"))
+      }
+
       const data: IPostUpdateInput = {
         ...updatePostDto,
-        //      published: false,
+        tags: JSON.stringify(tags),
         author: {
           connect: {
             id: userId
@@ -138,7 +160,7 @@ export class PostService {
         categories: {
           create: getCategoriesData(updatePostDto.categories),
         },
-        cover: updatePostDto.cover || "default.png"
+        cover: updatePostDto.cover || "default.png",
       }
 
       try {

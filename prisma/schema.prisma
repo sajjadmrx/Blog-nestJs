@@ -41,6 +41,7 @@ model Post {
   updatedAt  DateTime            @updatedAt
   Comment    Comment[]
   categories CategoriesOnPosts[]
+  tags       String              @default("[]")
 }
 
 model Category {

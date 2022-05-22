@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CreatePostDto {
 
@@ -43,9 +43,21 @@ export class CreatePostDto {
 
   @ApiProperty({
     description: 'category of the post',
-    example: [1, 2],
-    required: true
+    example: [1],
+    required: true,
+    maxItems: 3,
+    minItems: 1,
   })
+  @ArrayMinSize(1)
+  @ArrayMaxSize(3)
   @IsArray()
   categories: number[];
+
+
+  @ApiProperty({
+    description: 'Tags of the post',
+    example: ['tag1', 'tag2'],
+    required: true
+  })
+  tags: string[];
 }

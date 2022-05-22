@@ -25,6 +25,7 @@ enum responseMessages {
     POST_NOT_EXIST = 'POST_NOT_EXIST',
     CATEGORY_EXIST = 'CATEGORY_EXIST',
     INVALID_ID = 'INVALID_ID',
+    TAGS_INVALID = 'TAGS_INVALID',
 }
 
 export function getResponseMessage(message: keyof typeof responseMessages) {

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `post` ADD COLUMN `tags` VARCHAR(191) NOT NULL DEFAULT '[]';
