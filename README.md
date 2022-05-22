@@ -16,7 +16,7 @@
 <ul>
     <li> TypeScript </li>
     <li> NestJS </li>
-    <li> prisma.io(ODM) </li>
+    <li> prisma.io(ORM) </li>
     <li> Swagger </li>
     <li> Swagger UI </li>
     <li> JWT </li>
