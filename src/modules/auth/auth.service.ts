@@ -40,7 +40,7 @@ export class AuthService {
   }
 
 
-  async signIn(user: SignInDto): Promise<object> {
+  async signIn(user: SignInDto) {
     try {
       const userExist = await this.userRepository.findOneByUsername(user.username);
       if (!userExist)
@@ -63,13 +63,9 @@ export class AuthService {
   }
 
 
-  jwtSignUserId(userId: number): object {
+  private jwtSignUserId(userId: number): string {
 
-    return responseData({
-      statusCode: "OK",
-      message: getResponseMessage("SUCCESS"),
-      data: this.jwtService.sign({ userId })
-    })
+    return this.jwtService.sign({ userId })
 
   }
 
