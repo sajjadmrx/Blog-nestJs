@@ -4,6 +4,7 @@ import { getResponseMessage } from 'src/common/constants/messages.constant';
 import { fileHasExist } from 'src/common/functions/fileValidator.func';
 import { responseData } from 'src/common/functions/response.func';
 import { IPost, IPostCreateInput, IPostUpdateInput } from 'src/common/interfaces/post.interface';
+import { CategoriesRepository } from '../categories/categories.repository';
 import { CreatePostDto } from './dtos/createPost.dto';
 import { searchPostDto } from './dtos/search.dto';
 import { UpdatePostDto } from './dtos/updatePost.dto';
@@ -15,7 +16,7 @@ import { getCategoriesData } from './post.utility';
 @Injectable()
 export class PostService {
 
-  constructor(private postRepository: PostRepository) { }
+  constructor(private postRepository: PostRepository, private categoriesRepository: CategoriesRepository) { }
 
 
   async getPublicPosts(search: searchPostDto) {
@@ -88,6 +89,15 @@ export class PostService {
         }
       }
 
+      try {
+        const valiadate = await this.categoriesRepository.hasExistWithIds(createPostDto.categories)
+        if (!valiadate)
+          throw new Error("catch")
+      } catch (error) {
+        throw new BadRequestException(getResponseMessage("CATEGORIES_NOT_EXIST"))
+      }
+
+
       let tags: string;
       try {
         if (Array.isArray(createPostDto.tags))
@@ -139,6 +149,15 @@ export class PostService {
 
       }
 
+
+      try {
+        const valiadate = await this.categoriesRepository.hasExistWithIds(updatePostDto.categories)
+        if (!valiadate)
+          throw new Error("catch")
+      } catch (error) {
+        throw new BadRequestException(getResponseMessage("CATEGORIES_NOT_EXIST"))
+      }
+
       let tags: string;
       try {
         if (Array.isArray(updatePostDto.tags))
@@ -148,7 +167,6 @@ export class PostService {
       } catch (error) {
         throw new BadRequestException(getResponseMessage("TAGS_INVALID"))
       }
-
       const data: IPostUpdateInput = {
         ...updatePostDto,
         tags: JSON.stringify(tags),

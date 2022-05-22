@@ -54,4 +54,20 @@ export class CategoriesRepository {
             }
         })
     }
+
+    hasExistWithIds(ids: number[]): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.prisma.category.findMany({
+                where: {
+                    id: {
+                        in: ids
+                    }
+                }
+            }).then((categories: ICategory[]) => {
+                resolve(categories.length === ids.length)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
 }
