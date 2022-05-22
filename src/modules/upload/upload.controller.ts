@@ -21,7 +21,7 @@ export class UploadController {
     constructor(private uploadService: uploadService) { }
 
 
-    @Post('post')
+    @Post('posts')
     @ApiFile('cover')
     @ApiConsumes('multipart/form-data')
     @UseInterceptors(FileInterceptor('cover', {
