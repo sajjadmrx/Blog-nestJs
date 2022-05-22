@@ -32,8 +32,12 @@ export class AuthService {
       const createdUser = await this.userRepository.create(newUser);
 
 
+      return responseData({
+        statusCode: "OK",
+        message: getResponseMessage("SUCCESS"),
+        data: this.jwtSignUserId(createdUser.id)
+      })
 
-      return this.jwtSignUserId(createdUser.id);
     } catch (error) {
       throw error
     }
