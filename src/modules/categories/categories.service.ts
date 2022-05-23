@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { getResponseMessage } from "src/common/constants/messages.constant";
-import { responseData } from "src/common/functions/response.func";
-import { ICategoryCreateInput } from "src/common/interfaces/categories.interface";
+import { getResponseMessage } from "src/shared/constants/messages.constant";
+import { responseData } from "src/shared/functions/response.func";
+import { ICategoryCreateInput } from "src/shared/interfaces/categories.interface";
 import { CategoriesRepository } from "./categories.repository";
 import { CreateCategoryDto } from "./dtos/create.dto";
 import { updateCategoryDto } from "./dtos/update.dto";

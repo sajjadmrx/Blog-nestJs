@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { getResponseMessage } from "src/common/constants/messages.constant";
-import { responseData } from "src/common/functions/response.func";
+import { getResponseMessage } from "src/shared/constants/messages.constant";
+import { responseData } from "src/shared/functions/response.func";
 import { ResizeService } from "./resize.service";
 import { unlink, writeFile } from 'fs/promises'
 @Injectable()

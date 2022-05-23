@@ -2,8 +2,8 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Uploaded
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBearerAuth, ApiConsumes, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 
-import { getUser } from "src/common/decorators/req-user.decorator";
-import CheckRoleGuard from "src/common/guards/check-roles.guard";
+import { getUser } from "src/shared/decorators/req-user.decorator";
+import CheckRoleGuard from "src/shared/guards/check-roles.guard";
 import { CreatePostDto } from "./dtos/createPost.dto";
 import { searchPostDto } from "./dtos/search.dto";
 import { UpdatePostDto } from "./dtos/updatePost.dto";

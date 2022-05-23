@@ -6,8 +6,8 @@ import * as bcrypt from "bcrypt";
 import { SignUpDto } from "./dtos/signup.dto";
 import { JwtService } from "@nestjs/jwt";
 import { UsersRepository } from "../users/users.repository";
-import { responseData } from "src/common/functions/response.func";
-import { getResponseMessage } from "src/common/constants/messages.constant";
+import { responseData } from "src/shared/functions/response.func";
+import { getResponseMessage } from "src/shared/constants/messages.constant";
 
 @Injectable()
 export class AuthService {

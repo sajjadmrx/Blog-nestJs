@@ -1,9 +1,9 @@
 import { BadRequestException, HttpCode, HttpStatus, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { Role } from "@prisma/client";
-import { IUser } from "src/common/interfaces/user.interface";
+import { IUser } from "src/shared/interfaces/user.interface";
 import { UsersRepository } from "./users.repository";
-import { getResponseMessage } from '../../common/constants/messages.constant'
-import { responseData } from "src/common/functions/response.func";
+import { getResponseMessage } from '../../shared/constants/messages.constant'
+import { responseData } from "src/shared/functions/response.func";
 
 
 @Injectable()

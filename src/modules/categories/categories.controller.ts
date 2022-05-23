@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from "@nestjs/swagger";
-import CheckRoleGuard from "src/common/guards/check-roles.guard";
+import CheckRoleGuard from "src/shared/guards/check-roles.guard";
 import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto } from "./dtos/create.dto";
 import { updateCategoryDto } from "./dtos/update.dto";

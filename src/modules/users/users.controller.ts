@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Put, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBadRequestResponse, ApiBearerAuth, ApiSecurity, ApiTags } from "@nestjs/swagger";
-import { getUser } from "src/common/decorators/req-user.decorator";
-import CheckRoleGuard from "src/common/guards/check-roles.guard";
-import { IUser } from "src/common/interfaces/user.interface";
+import { getUser } from "src/shared/decorators/req-user.decorator";
+import CheckRoleGuard from "src/shared/guards/check-roles.guard";
+import { IUser } from "src/shared/interfaces/user.interface";
 import { RoleDto } from "./dtos/role.dto";
 import { UsersService } from "./users.service";
 

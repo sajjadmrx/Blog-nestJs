@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
-import { ICategory, ICategoryCreateInput, ICategoryUpdateInput } from "src/common/interfaces/categories.interface";
+import { ICategory, ICategoryCreateInput, ICategoryUpdateInput } from "src/shared/interfaces/categories.interface";
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()

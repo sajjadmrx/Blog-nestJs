@@ -1,9 +1,9 @@
 import { BadRequestException, HttpCode, HttpStatus, Injectable } from '@nestjs/common';
 import { unlink } from 'fs/promises';
-import { getResponseMessage } from 'src/common/constants/messages.constant';
-import { fileHasExist } from 'src/common/functions/fileValidator.func';
-import { responseData } from 'src/common/functions/response.func';
-import { IPost, IPostCreateInput, IPostUpdateInput } from 'src/common/interfaces/post.interface';
+import { getResponseMessage } from 'src/shared/constants/messages.constant';
+import { fileHasExist } from 'src/shared/functions/fileValidator.func';
+import { responseData } from 'src/shared/functions/response.func';
+import { IPost, IPostCreateInput, IPostUpdateInput } from 'src/shared/interfaces/post.interface';
 import { CategoriesRepository } from '../categories/categories.repository';
 import { CreatePostDto } from './dtos/createPost.dto';
 import { searchPostDto } from './dtos/search.dto';
