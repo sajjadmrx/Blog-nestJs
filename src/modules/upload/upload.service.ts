@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { getResponseMessage } from "src/shared/constants/messages.constant";
 import { responseData } from "src/shared/functions/response.func";
 import { ResizeService } from "./resize.service";
-import { unlink, writeFile } from 'fs/promises'
+import { unlink, writeFile,stat,mkdir } from 'fs/promises'
 @Injectable()
 export class uploadService {
     constructor(
@@ -17,6 +17,14 @@ export class uploadService {
 
             const buffer = await this.resizeService.withPath(file.path, 500, 500)
             //  await unlink(file.path)
+            const path_ = `./uploads/posts`;
+
+
+                const state = await stat(path_);
+                if (!state.isDirectory()) {
+                    await mkdir(path_);
+                }
+
             await writeFile(file.path, buffer)
 
             return responseData({

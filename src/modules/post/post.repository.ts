@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Prisma } from '@prisma/client';
 import { IPost, IPostCreateInput, IPostUpdateInput } from 'src/shared/interfaces/post.interface';
 import { IRepository } from 'src/shared/interfaces/repository.interface';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { PrismaService } from '../prisma/prisma.service';
 
 

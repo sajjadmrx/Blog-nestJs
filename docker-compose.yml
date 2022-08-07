@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+    environment:
+      - DATABASE_URL=mysql://admin:letmein@mysqldb:3306/blog
+    volumes:
+      - ./my-uploads:/usr/blog/uploads
+
+  mysqldb:
+    image: mysql:8.0
+    ports:
+      - '3306:3306'
+    expose:
+      - 3306
+    environment:
+      MYSQL_DATABASE: blog
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: letmein
+      MYSQL_ROOT_PASSWORD: letmein
+      SERVICE_TAGS: prod
+      SERVICE_NAME: mysqldb
+    volumes:
+      - ./db-data:/var/lib/mysql
+volumes:
+  mysql-data:
+  my-uploads:
+
