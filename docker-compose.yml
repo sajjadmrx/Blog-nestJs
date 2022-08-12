@@ -1,6 +1,11 @@
 version: '3.8'
 services:
 
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
   app:
     build:
       context: .
@@ -8,11 +13,14 @@ services:
     ports:
       - '3000:3000'
     depends_on:
+      - redis
       - mysqldb
     links:
+      - redis
       - mysqldb
     environment:
       - DATABASE_URL=mysql://admin:letmein@mysqldb:3306/blog
+      - REDIS_URL=redis
     volumes:
       - ./my-uploads:/usr/blog/uploads
 
