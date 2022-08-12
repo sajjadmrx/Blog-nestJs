@@ -1,25 +1,30 @@
-import { Module } from '@nestjs/common'
+import { Module } from "@nestjs/common";
 
-import { AuthModule } from './modules/auth/auth.module';
-import { CategoriesModule } from './modules/categories/categories.module';
-import { PostModule } from './modules/post/post.module';
-import { PrismaModule } from './modules/prisma/prisma.module';
-import { UploadModule } from './modules/upload/upload.module';
-import { UserModule } from './modules/users/users.module';
+import { AuthModule } from "./modules/auth/auth.module";
+import { CategoriesModule } from "./modules/categories/categories.module";
+import { PostModule } from "./modules/post/post.module";
+import { PrismaModule } from "./modules/prisma/prisma.module";
+import { UploadModule } from "./modules/upload/upload.module";
+import { UserModule } from "./modules/users/users.module";
 import { MailModule } from "./modules/mail/mail.module";
-
+import { ConfigModule } from "@nestjs/config";
+import Configuration from "./configuration";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      load: [Configuration],
+      isGlobal: true,
+    }),
     PrismaModule,
     AuthModule,
     UserModule,
     PostModule,
     UploadModule,
     CategoriesModule,
-    MailModule
+    MailModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
