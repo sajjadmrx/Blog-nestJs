@@ -7,8 +7,9 @@ import { PrismaModule } from "./modules/prisma/prisma.module";
 import { UploadModule } from "./modules/upload/upload.module";
 import { UserModule } from "./modules/users/users.module";
 import { MailModule } from "./modules/mail/mail.module";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import Configuration from "./configuration";
+import { QueuesModule } from "./modules/queues/queues.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import Configuration from "./configuration";
       load: [Configuration],
       isGlobal: true,
     }),
+    QueuesModule,
     PrismaModule,
     AuthModule,
     UserModule,

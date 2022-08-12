@@ -13,37 +13,44 @@ import { UsersRepository } from "../users/users.repository";
 import { responseData } from "src/shared/functions/response.func";
 import { getResponseMessage } from "src/shared/constants/messages.constant";
 import { MailService } from "../mail/mail.service";
+import { InjectQueue } from "@nestjs/bull";
+import { QueuesConstant } from "../../shared/constants/queues.constant";
+import { Queue } from "bull";
+import { QueuesWelcomeEmailCreate } from "../../shared/interfaces/queues.interface";
 
 @Injectable()
 export class AuthService {
   constructor(
     private userRepository: UsersRepository,
     private jwtService: JwtService,
-    private mailService: MailService
+    //private mailService: MailService,
+    @InjectQueue(QueuesConstant.SEND_WELCOME_EMAIL)
+    private queueSendWelcomeEmail: Queue<QueuesWelcomeEmailCreate>
   ) {}
 
-  async signUp(user: SignUpDto) {
+  async signUp(userDto: SignUpDto) {
     try {
       const usersExist = await this.userRepository.findByEmailOrUsername(
-        user.email,
-        user.username
+        userDto.email,
+        userDto.username
       );
       if (usersExist.length > 0)
         throw new BadRequestException("Email or username already exist");
 
       let newUser = {
-        ...user,
+        ...userDto,
       };
 
       newUser.password = await bcrypt.hash(newUser.password, 10);
 
-      const createdUser = await this.userRepository.create(newUser);
+      const user = await this.userRepository.create(newUser);
 
-      await this.mailService.sendWelcome(createdUser);
+      // await this.mailService.sendWelcome(user);
+      this.queueSendWelcomeEmail.add({ user: user });
       return responseData({
         statusCode: "OK",
         message: getResponseMessage("SUCCESS"),
-        data: this.jwtSignUserId(createdUser.id),
+        data: this.jwtSignUserId(user.id),
       });
     } catch (error) {
       throw error;
