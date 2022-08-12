@@ -38,3 +38,4 @@ package-lock.json
 
 db-data
 my-uploads
+.env

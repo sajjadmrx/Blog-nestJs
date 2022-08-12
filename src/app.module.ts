@@ -6,6 +6,7 @@ import { PostModule } from './modules/post/post.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { UserModule } from './modules/users/users.module';
+import { MailModule } from "./modules/mail/mail.module";
 
 
 @Module({
@@ -16,6 +17,7 @@ import { UserModule } from './modules/users/users.module';
     PostModule,
     UploadModule,
     CategoriesModule,
+    MailModule
   ],
   controllers: [],
   providers: [],

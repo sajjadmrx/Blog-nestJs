@@ -1,0 +1,3 @@
+export enum MailConstant {
+  FROM = "noreply@blog.com", //or process.env.....
+}
