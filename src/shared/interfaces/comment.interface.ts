@@ -1,11 +1,9 @@
-export interface IComment {
-  id?: number;
-  content: string;
-  isParent?: boolean;
-  parentId?: number;
-  userId: number;
+import { Comment as _Comment, Prisma } from "@prisma/client";
+
+export interface Comment extends _Comment {}
+export interface CommentCreateInput
+  extends Omit<Prisma.CommentCreateInput, "author" | "post" | "reply"> {
+  replyId: number;
+  authorId: number;
   postId: number;
-  // isSpoiled: boolean; #TODO: add spoiled comment feature
-  createdAt?: Date;
-  updatedAt?: Date;
 }

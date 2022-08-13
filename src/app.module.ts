@@ -10,6 +10,7 @@ import { MailModule } from "./modules/mail/mail.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import Configuration from "./configuration";
 import { QueuesModule } from "./modules/queues/queues.module";
+import { CommentsModule } from "./modules/comments/comments.module";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { QueuesModule } from "./modules/queues/queues.module";
     UploadModule,
     CategoriesModule,
     MailModule,
+    CommentsModule,
   ],
   controllers: [],
   providers: [],
