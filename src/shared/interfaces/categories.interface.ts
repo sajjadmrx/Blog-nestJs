@@ -1,9 +1,7 @@
-import { Prisma, Category } from "@prisma/client"
+import { Prisma, Category as _Category } from "@prisma/client";
 
-export interface ICategory extends Category { };
+export interface Category extends _Category {}
 
+export interface CategoryCreateInput extends Prisma.CategoryCreateInput {}
 
-export interface ICategoryCreateInput extends Prisma.CategoryCreateInput { };
-
-
-export interface ICategoryUpdateInput extends Prisma.CategoryUpdateInput { };
+export interface CategoryUpdateInput extends Prisma.CategoryUpdateInput {}
