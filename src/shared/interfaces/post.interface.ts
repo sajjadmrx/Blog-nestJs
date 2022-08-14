@@ -1,7 +1,7 @@
-import { Post, Prisma, } from "@prisma/client";
+import { Post as _Post, Prisma } from "@prisma/client";
 
-export interface IPost extends Post { }
+export interface Post extends _Post {}
 
-export interface IPostCreateInput extends Prisma.PostCreateInput { }
+export interface PostCreateInput extends Prisma.PostCreateInput {}
 
-export interface IPostUpdateInput extends Prisma.PostUpdateInput { }
+export interface PostUpdateInput extends Prisma.PostUpdateInput {}

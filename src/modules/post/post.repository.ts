@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import {
-  IPost,
-  IPostCreateInput,
-  IPostUpdateInput,
+  Post,
+  PostCreateInput,
+  PostUpdateInput,
 } from "src/shared/interfaces/post.interface";
 import { PrismaService } from "../prisma/prisma.service";
 
@@ -11,7 +11,7 @@ import { PrismaService } from "../prisma/prisma.service";
 export class PostRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findPublic(page: number, limit: number, query): Promise<IPost[]> {
+  async findPublic(page: number, limit: number, query): Promise<Post[]> {
     return this.prisma.post.findMany({
       where: {
         ...query,
@@ -45,7 +45,7 @@ export class PostRepository {
     });
   }
 
-  async findById(id: number): Promise<IPost | null> {
+  async findById(id: number): Promise<Post | null> {
     return this.prisma.post.findUnique({
       where: {
         id: id,
@@ -67,11 +67,11 @@ export class PostRepository {
     return this.prisma.post.count({ where: { ...query, published: true } });
   }
 
-  async create(post: IPostCreateInput): Promise<IPost> {
+  async create(post: PostCreateInput): Promise<Post> {
     return this.prisma.post.create({ data: post });
   }
 
-  async update(id: number, post: IPostUpdateInput): Promise<IPost> {
+  async update(id: number, post: PostUpdateInput): Promise<Post> {
     return this.prisma.post.update({
       where: {
         id: id,
@@ -80,7 +80,7 @@ export class PostRepository {
     });
   }
 
-  async delete(id: number): Promise<IPost> {
+  async delete(id: number): Promise<Post> {
     return this.prisma.post.delete({
       where: {
         id: id,
