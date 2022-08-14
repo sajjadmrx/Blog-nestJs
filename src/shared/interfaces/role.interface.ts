@@ -1,5 +1,4 @@
-import { Role } from "@prisma/client";
+import { Role as _Role } from "@prisma/client";
 
-export interface IRole {
-    name: Role;
-}
+export type RoleType = _Role;
+export const Role = _Role;

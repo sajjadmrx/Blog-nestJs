@@ -5,11 +5,11 @@ import {
   Injectable,
   InternalServerErrorException,
 } from "@nestjs/common";
-import { Role } from "@prisma/client";
 import { User } from "src/shared/interfaces/user.interface";
 import { UsersRepository } from "./users.repository";
 import { getResponseMessage } from "../../shared/constants/messages.constant";
 import { responseData } from "src/shared/functions/response.func";
+import { Role, RoleType } from "../../shared/interfaces/role.interface";
 
 @Injectable()
 export class UsersService {
@@ -27,10 +27,9 @@ export class UsersService {
 
   async updateRole(userId: number, role: string) {
     try {
-      const hasRole = Role[role];
+      const hasRole: RoleType | null = Role[role];
       if (!hasRole)
         throw new BadRequestException(getResponseMessage("INVALID_ROLE"));
-
       await this.userRepo.update(userId, {
         role: hasRole,
       });

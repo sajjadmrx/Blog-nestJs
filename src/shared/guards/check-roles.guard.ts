@@ -4,11 +4,11 @@ import {
   ForbiddenException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Role } from "@prisma/client";
 import { Observable } from "rxjs";
 import { User } from "../interfaces/user.interface";
+import { RoleType } from "../interfaces/role.interface";
 
-function CheckRoleGuard(roles: Array<Role>): any {
+function CheckRoleGuard(roles: Array<RoleType>): any {
   class _checkRoldGuard implements CanActivate {
     constructor(private refactor: Reflector) {}
 

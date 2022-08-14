@@ -10,11 +10,11 @@ import { User } from "../../shared/interfaces/user.interface";
 import { CommentCreateDto } from "./dtos/create.dto";
 import { getResponseMessage } from "../../shared/constants/messages.constant";
 import { PostRepository } from "../post/post.repository";
-import { Role } from "@prisma/client";
 import {
   Comment,
   CommentWithChilds,
 } from "../../shared/interfaces/comment.interface";
+import { Role } from "../../shared/interfaces/role.interface";
 
 @Injectable()
 export class CommentsService {
