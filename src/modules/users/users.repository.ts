@@ -1,18 +1,16 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable } from "@nestjs/common";
 
-
-import { IUser, UserCreateInput, UserUpdateInput } from 'src/shared/interfaces/user.interface';
-import { Prisma, User } from '@prisma/client';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import {
+  User,
+  UserCreateInput,
+  UserUpdateInput,
+} from "src/shared/interfaces/user.interface";
+import { Prisma } from "@prisma/client";
+import { PrismaService } from "src/modules/prisma/prisma.service";
 
 @Injectable()
 export class UsersRepository {
-
-  constructor(
-    private prisma: PrismaService
-  ) { }
-
-
+  constructor(private prisma: PrismaService) {}
 
   async find(params: {
     skip?: number;
@@ -20,74 +18,74 @@ export class UsersRepository {
     cursor?: Prisma.UserWhereUniqueInput;
     where?: Prisma.UserWhereInput;
     orderBy?: Prisma.UserOrderByWithRelationInput;
-  }): Promise<IUser[]> {
+  }): Promise<User[]> {
     return this.prisma.user.findMany({
       ...params,
-    })
+    });
   }
 
-  async findById(id: number): Promise<IUser | null> {
+  async findById(id: number): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: {
-        id: id
-      }
-    })
+        id: id,
+      },
+    });
   }
 
-  async findOneByEmailAndUsername(email: string, username: string): Promise<IUser | null> {
+  async findOneByEmailAndUsername(
+    email: string,
+    username: string
+  ): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: {
         email,
-        username
-      }
-    })
+        username,
+      },
+    });
   }
 
-  async findOneByUsername(username: string): Promise<IUser> {
+  async findOneByUsername(username: string): Promise<User> {
     return this.prisma.user.findUnique({
       where: {
-        username
-      }
-    })
+        username,
+      },
+    });
   }
 
-  async findOneByEmail(email: string): Promise<IUser | null> {
+  async findOneByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: {
-        email
-      }
-    })
+        email,
+      },
+    });
   }
 
-  async findByEmailOrUsername(email: string, username: string): Promise<IUser[]> {
+  async findByEmailOrUsername(
+    email: string,
+    username: string
+  ): Promise<User[]> {
     return this.prisma.user.findMany({
       where: {
-        OR: [
-          { email },
-          { username }
-        ]
-      }
-    })
+        OR: [{ email }, { username }],
+      },
+    });
   }
 
-  async create(user: UserCreateInput): Promise<IUser> {
+  async create(user: UserCreateInput): Promise<User> {
     return this.prisma.user.create({
       data: {
-        ...user
-      }
-    })
+        ...user,
+      },
+    });
   }
 
-  async update(id: number, entity: UserUpdateInput): Promise<IUser> {
-    return this.prisma.user.update({ where: { id: id }, data: entity })
+  async update(id: number, entity: UserUpdateInput): Promise<User> {
+    return this.prisma.user.update({ where: { id: id }, data: entity });
   }
-  async deleteOneWithId(id: number): Promise<IUser> {
-    return this.prisma.user.delete({ where: { id: id } })
+  async deleteOneWithId(id: number): Promise<User> {
+    return this.prisma.user.delete({ where: { id: id } });
   }
   // async delete(id: number): Promise<void> {
   //   return this.repository.delete(id)
   // }
-
-
 }
-

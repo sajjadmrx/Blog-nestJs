@@ -1,5 +1,5 @@
-import { IUser } from "./user.interface";
+import { User } from "./user.interface";
 
 export interface QueuesWelcomeEmailCreate {
-  user: IUser;
+  user: User;
 }

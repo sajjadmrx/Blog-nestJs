@@ -1,10 +1,7 @@
-import { Prisma, User } from "@prisma/client";
+import { Prisma, User as _User } from "@prisma/client";
 
-export interface IUser extends User {
+export interface User extends _User {}
 
-}
+export type UserCreateInput = Prisma.UserCreateInput; // Omit<Prisma.UserCreateInput>;
 
-
-export type UserCreateInput = Prisma.UserCreateInput // Omit<Prisma.UserCreateInput>;
-
-export type UserUpdateInput = Prisma.UserUpdateInput
+export type UserUpdateInput = Prisma.UserUpdateInput;

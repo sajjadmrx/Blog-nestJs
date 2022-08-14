@@ -9,7 +9,7 @@ import {
 } from "@nestjs/swagger";
 import { getUser } from "src/shared/decorators/req-user.decorator";
 import CheckRoleGuard from "src/shared/guards/check-roles.guard";
-import { IUser } from "src/shared/interfaces/user.interface";
+import { User } from "src/shared/interfaces/user.interface";
 import { RoleDto } from "./dtos/role.dto";
 import { UsersService } from "./users.service";
 
@@ -24,7 +24,7 @@ export class UsersController {
   })
   @ApiTags("Current User")
   @Get("/@me")
-  profile(@getUser<IUser>() user: IUser) {
+  profile(@getUser<User>() user: User) {
     return this.usersService.getProfile(user);
   }
 

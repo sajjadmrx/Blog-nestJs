@@ -11,7 +11,7 @@ import { CommentCreateDto } from "./dtos/create.dto";
 import { CommentsService } from "./comments.service";
 import { AuthGuard } from "@nestjs/passport";
 import { getUser } from "../../shared/decorators/req-user.decorator";
-import { IUser } from "../../shared/interfaces/user.interface";
+import { User } from "../../shared/interfaces/user.interface";
 import CheckRoleGuard from "../../shared/guards/check-roles.guard";
 
 @ApiTags("Comment")
@@ -26,7 +26,7 @@ export class CommentsController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard("jwt"))
   @Post()
-  async create(@Body() data: CommentCreateDto, @getUser() user: IUser) {
+  async create(@Body() data: CommentCreateDto, @getUser() user: User) {
     return this.commentsService.create(data, user);
   }
 
@@ -37,7 +37,7 @@ export class CommentsController {
   @UseGuards(CheckRoleGuard(["ADMIN", "USER"])) //ADMIN OR USER
   @UseGuards(AuthGuard("jwt"))
   @Delete(":id")
-  async delete(@Param("id") commentId: string, @getUser() user: IUser) {
+  async delete(@Param("id") commentId: string, @getUser() user: User) {
     return this.commentsService.delete(Number(commentId), user);
   }
 }

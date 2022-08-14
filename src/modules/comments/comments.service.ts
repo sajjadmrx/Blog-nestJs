@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { CommentsRepository } from "./comments.repository";
-import { IUser } from "../../shared/interfaces/user.interface";
+import { User } from "../../shared/interfaces/user.interface";
 import { CommentCreateDto } from "./dtos/create.dto";
 import { getResponseMessage } from "../../shared/constants/messages.constant";
 import { PostRepository } from "../post/post.repository";
@@ -23,7 +23,7 @@ export class CommentsService {
     private postsRepository: PostRepository
   ) {}
 
-  async create(data: CommentCreateDto, user: IUser) {
+  async create(data: CommentCreateDto, user: User) {
     const postId: number = data.postId;
     const hasPost = await this.postsRepository.findById(postId);
     if (!hasPost)
@@ -45,7 +45,7 @@ export class CommentsService {
     return comment.id;
   }
 
-  async delete(commentId: number, user: IUser) {
+  async delete(commentId: number, user: User) {
     try {
       const comment: CommentWithChilds | null =
         await this.commentsRepository.getById(commentId);
