@@ -50,18 +50,14 @@ export class PostService {
       const hasPrev = page > 1;
       const nextPage = page + 1;
 
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-        data: {
-          posts,
-          total,
-          pages,
-          hasNext,
-          hasPrev,
-          nextPage,
-        },
-      });
+      return {
+        posts,
+        total,
+        pages,
+        hasNext,
+        hasPrev,
+        nextPage,
+      };
     } catch (error) {
       throw error;
     }
@@ -119,7 +115,7 @@ export class PostService {
         throw new BadRequestException(getResponseMessage("TAGS_INVALID"));
       }
 
-      const post: PostCreateInput = {
+      const postInput: PostCreateInput = {
         ...createPostDto,
         tags: JSON.stringify(tags),
         author: {
@@ -133,12 +129,9 @@ export class PostService {
         },
       };
 
-      await this.postRepository.create(post);
+      const post = await this.postRepository.create(postInput);
 
-      return responseData({
-        statusCode: "CREATED",
-        message: getResponseMessage("SUCCESS"),
-      });
+      return post.id;
     } catch (error) {
       throw error;
     }
@@ -197,10 +190,7 @@ export class PostService {
         throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"));
       }
 
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-      });
+      return {};
     } catch (error) {
       throw error;
     }
@@ -210,13 +200,10 @@ export class PostService {
     try {
       const post: Post = await this.postRepository.delete(id);
       try {
-        await unlink(`./uploads/posts/${post.cover}`);
+        await unlink(`./uploads/posts/${post.cover}`); //TODO ADD QUEUE
       } catch (error) {
       } finally {
-        return responseData({
-          statusCode: "OK",
-          message: getResponseMessage("SUCCESS"),
-        });
+        return {};
       }
     } catch (error) {
       throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"));

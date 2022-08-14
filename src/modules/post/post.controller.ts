@@ -29,8 +29,10 @@ import { searchPostDto } from "./dtos/search.dto";
 import { UpdatePostDto } from "./dtos/updatePost.dto";
 
 import { PostService } from "./post.service";
+import { ResponseInterceptor } from "../../shared/interceptors/response.interceptor";
 
 @ApiTags("Post")
+@UseInterceptors(ResponseInterceptor)
 @Controller("posts")
 export class PostController {
   constructor(private postService: PostService) {}

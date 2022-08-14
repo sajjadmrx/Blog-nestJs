@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Put, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  UseGuards,
+  UseInterceptors,
+} from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import {
   ApiBadRequestResponse,
@@ -12,9 +20,11 @@ import CheckRoleGuard from "src/shared/guards/check-roles.guard";
 import { User } from "src/shared/interfaces/user.interface";
 import { RoleDto } from "./dtos/role.dto";
 import { UsersService } from "./users.service";
+import { ResponseInterceptor } from "../../shared/interceptors/response.interceptor";
 
-@UseGuards(AuthGuard("jwt")) // set up auth guard for all routes
 @ApiBearerAuth()
+@UseInterceptors(ResponseInterceptor)
+@UseGuards(AuthGuard("jwt"))
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

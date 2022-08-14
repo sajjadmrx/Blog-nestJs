@@ -61,7 +61,7 @@ export class CommentsService {
 
       await this.commentsRepository.deleteOne(comment.id);
 
-      return getResponseMessage("SUCCESS").toString();
+      return {};
     } catch (e) {
       throw e;
     }

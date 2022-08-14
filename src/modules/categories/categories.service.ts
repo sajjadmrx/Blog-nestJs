@@ -75,11 +75,7 @@ export class CategoriesService {
 
       const created = await this.categoriesRepository.create(input);
 
-      return responseData({
-        statusCode: "CREATED",
-        message: getResponseMessage("SUCCESS"),
-        data: created,
-      });
+      return created;
     } catch (error) {
       throw error;
     }
@@ -95,11 +91,7 @@ export class CategoriesService {
         throw new BadRequestException(getResponseMessage("CATEGORY_EXIST"));
 
       const updated = await this.categoriesRepository.update(id, item);
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-        data: updated,
-      });
+      return updated;
     } catch (error) {
       throw error;
     }
@@ -113,11 +105,7 @@ export class CategoriesService {
       if (!category) throw new BadRequestException("Category not found");
 
       await this.categoriesRepository.delete(category.id);
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-        // data: deleted,
-      });
+      return {};
     } catch (error) {
       throw error;
     }

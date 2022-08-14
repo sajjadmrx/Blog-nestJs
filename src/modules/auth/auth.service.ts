@@ -47,11 +47,7 @@ export class AuthService {
 
       // await this.mailService.sendWelcome(user);
       this.queueSendWelcomeEmail.add({ user: user });
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-        data: this.jwtSignUserId(user.id),
-      });
+      return this.jwtSignUserId(user.id);
     } catch (error) {
       throw error;
     }
@@ -71,11 +67,7 @@ export class AuthService {
       if (!passwordIsMatch)
         throw new UnauthorizedException("invalid credentials");
 
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-        data: this.jwtSignUserId(userExist.id),
-      });
+      return this.jwtSignUserId(userExist.id);
     } catch (error) {
       throw error;
     }

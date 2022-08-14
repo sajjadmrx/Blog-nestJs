@@ -21,12 +21,14 @@ import CheckRoleGuard from "src/shared/guards/check-roles.guard";
 import { postFilter } from "./filters/post.filter";
 import { uploadService } from "./upload.service";
 import { postStorage } from "./upload.storages";
+import { ResponseInterceptor } from "../../shared/interceptors/response.interceptor";
 
-@Controller("uploads")
 @ApiTags("Upload File")
+@ApiBearerAuth()
+@UseInterceptors(ResponseInterceptor)
 @UseGuards(CheckRoleGuard(["ADMIN"]))
 @UseGuards(AuthGuard("jwt"))
-@ApiBearerAuth()
+@Controller("uploads")
 export class UploadController {
   constructor(private uploadService: uploadService) {}
 

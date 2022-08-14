@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CommentCreateDto } from "./dtos/create.dto";
@@ -13,8 +14,10 @@ import { AuthGuard } from "@nestjs/passport";
 import { getUser } from "../../shared/decorators/req-user.decorator";
 import { User } from "../../shared/interfaces/user.interface";
 import CheckRoleGuard from "../../shared/guards/check-roles.guard";
+import { ResponseInterceptor } from "../../shared/interceptors/response.interceptor";
 
 @ApiTags("Comment")
+@UseInterceptors(ResponseInterceptor)
 @Controller("comments")
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}

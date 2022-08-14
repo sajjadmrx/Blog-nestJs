@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import {
@@ -20,9 +21,11 @@ import CheckRoleGuard from "src/shared/guards/check-roles.guard";
 import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto } from "./dtos/create.dto";
 import { updateCategoryDto } from "./dtos/update.dto";
+import { ResponseInterceptor } from "../../shared/interceptors/response.interceptor";
 
-@Controller("/categories")
 @ApiTags("Categories")
+@UseInterceptors(ResponseInterceptor)
+@Controller("/categories")
 export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 

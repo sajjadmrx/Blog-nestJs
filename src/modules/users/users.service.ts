@@ -18,11 +18,7 @@ export class UsersService {
   getProfile(user: User) {
     const myUser = user;
     delete myUser.password;
-    return responseData({
-      statusCode: "OK",
-      message: getResponseMessage("SUCCESS"),
-      data: myUser,
-    });
+    return myUser;
   }
 
   async updateRole(userId: number, role: string) {
@@ -34,10 +30,7 @@ export class UsersService {
         role: hasRole,
       });
 
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-      });
+      return hasRole;
     } catch (error) {
       throw new BadRequestException(getResponseMessage("INVALID_USER_ID"));
     }
