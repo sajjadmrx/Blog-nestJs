@@ -7,3 +7,7 @@ export interface CommentCreateInput
   authorId: number;
   postId: number;
 }
+
+export interface CommentWithChilds extends Comment {
+  childs: Comment[];
+}
