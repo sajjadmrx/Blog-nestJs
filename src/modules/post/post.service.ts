@@ -205,7 +205,6 @@ export class PostService {
         isFolder: false,
       });
     } catch (error) {
-      console.log(error);
       throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"));
     }
   }
