@@ -63,12 +63,7 @@ export class CategoriesService {
         slug: createDto.slug,
         //parentId: 1
       };
-      // if (createDto.parentId) {
-      //     //TODO: check if parent exists
-      //     //TODO: add parentId to schema
-      //     //  input.parentId = 1
-      //     // input.parentId = Number(createDto.parentId)
-      // }
+
       const hasExist = await this.categoriesRepository.findBySlug(input.slug);
       if (hasExist)
         throw new BadRequestException(getResponseMessage("CATEGORY_EXIST"));
