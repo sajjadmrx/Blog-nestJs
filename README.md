@@ -14,14 +14,22 @@
 
 ## ⚗️technologies
 <ul>
-    <li> TypeScript </li>
-    <li> NestJS </li>
-    <li> prisma.io(ORM) </li>
-    <li> Swagger </li>
-    <li> Swagger UI </li>
-    <li> JWT </li>
-    <li>and many more... 🙂</li>
+    <li> 🟦 TypeScript </li>
+    <li> 😺 NestJS </li>
+    <li> 📤 prisma.io(ORM) </li>
+    <li> 🔃 Queue system </li>
+    <li> 📒 Swagger </li>
+    <li> 👤 JWT </li>
+    <li> 📧 Nodemailer </li>
+    <li> 🐬 Docker </li>
+    <li> 📦 Docker-Compose </li>
 </ul>
+
+
+# 📦 Docker
+```bash
+docker-compose up -d
+```
 
 ## 📥Installation
 
@@ -44,6 +52,6 @@ $ npm run start:prod
 ```
 # 📝document
 swagger-ui
-> localhost:port/api/docs
+> http://localhost:{port}/api/docs
 > 
 ![Swagger](/github/swagger.png)
