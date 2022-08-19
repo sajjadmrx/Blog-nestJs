@@ -12,7 +12,7 @@ export class uploadService {
       if (!file)
         throw new BadRequestException(getResponseMessage("FILE_IS_REQUIRED"));
 
-      const buffer = await this.resizeService.withPath(file.path, 500, 500);
+      const buffer = await this.resizeService.withPath(file.path, 500, 500); //TODO Add To queue
       //  await unlink(file.path)
       const path_ = `./uploads/posts`;
 
