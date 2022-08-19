@@ -82,8 +82,6 @@ export class PostService {
   }
 
   async create(userId: number, createPostDto: CreatePostDto) {
-    //TODO: Refactoring this code
-
     try {
       if (createPostDto.cover) {
         const hasExist: boolean = await fileHasExist(
@@ -96,9 +94,10 @@ export class PostService {
       }
 
       try {
-        const valiadate = await this.categoriesRepository.hasExistWithIds(
-          createPostDto.categories
-        );
+        const valiadate: boolean =
+          await this.categoriesRepository.hasExistWithIds(
+            createPostDto.categories
+          );
         if (!valiadate) throw new Error("catch");
       } catch (error) {
         throw new BadRequestException(
@@ -118,11 +117,7 @@ export class PostService {
       const postInput: PostCreateInput = {
         ...createPostDto,
         tags: JSON.stringify(tags),
-        author: {
-          connect: {
-            id: userId,
-          },
-        },
+        authorId: userId,
         cover: createPostDto.cover || "default.png",
         categories: {
           create: getCategoriesData(createPostDto.categories),
@@ -139,13 +134,11 @@ export class PostService {
 
   async update(userId: number, id: number, updatePostDto: UpdatePostDto) {
     try {
-      //TODO: Refactoring this code
-
       if (updatePostDto.cover) {
         const hasExist: boolean = await fileHasExist(
           updatePostDto.cover,
           "./uploads/posts"
-        ); //TODO : create class for file validator in upload module
+        );
         if (!hasExist) {
           throw new BadRequestException(getResponseMessage("FILE_NOT_EXIST"));
         }
@@ -173,11 +166,7 @@ export class PostService {
       const data: PostUpdateInput = {
         ...updatePostDto,
         tags: JSON.stringify(tags),
-        author: {
-          connect: {
-            id: userId,
-          },
-        },
+        authorId: userId,
         categories: {
           create: getCategoriesData(updatePostDto.categories),
         },
