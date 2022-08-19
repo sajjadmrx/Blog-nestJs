@@ -42,4 +42,10 @@ export class CommentsRepository {
       throw e;
     }
   }
+
+  async deleteCommentsByPostId(postId: number): Promise<BatchPayload> {
+    return this.db.comment.deleteMany({
+      where: { postId },
+    });
+  }
 }

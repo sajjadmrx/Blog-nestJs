@@ -6,7 +6,7 @@ import { MailService } from "../../mail/mail.service";
 import { User } from "../../../shared/interfaces/user.interface";
 
 @Processor(QueuesConstant.SEND_WELCOME_EMAIL)
-export class SendWelcomeEmailProcessor {
+export class SendWelcomeEmailConsumer {
   constructor(private mailService: MailService) {}
   @Process()
   async handleSender(job: Job<QueuesWelcomeEmailCreate>): Promise<void> {

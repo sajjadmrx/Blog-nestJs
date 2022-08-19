@@ -6,6 +6,7 @@ import {
   PostUpdateInput,
 } from "src/shared/interfaces/post.interface";
 import { PrismaService } from "../prisma/prisma.service";
+import { BatchPayload } from "../../shared/interfaces/repository.interface";
 
 @Injectable()
 export class PostRepository {
@@ -83,8 +84,13 @@ export class PostRepository {
   async delete(id: number): Promise<Post> {
     return this.prisma.post.delete({
       where: {
-        id: id,
+        id,
       },
+    });
+  }
+  async deleteCategoriesOnPost(postId: number): Promise<BatchPayload> {
+    return this.prisma.categoriesOnPosts.deleteMany({
+      where: { postId },
     });
   }
 }

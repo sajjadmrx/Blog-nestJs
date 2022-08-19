@@ -1,14 +1,18 @@
 import { Global, Module } from "@nestjs/common";
 import { BullModule } from "@nestjs/bull";
 import { QueuesConstant } from "../../shared/constants/queues.constant";
-import { SendWelcomeEmailProcessor } from "./consumers/send-welcome.consumer";
+import { SendWelcomeEmailConsumer } from "./consumers/send-welcome.consumer";
 import { ConfigService } from "@nestjs/config";
+import { DeleteFileConsumer } from "./consumers/delete-file.consumer";
 
 const importsAndExports = [
-  BullModule.registerQueue({ name: QueuesConstant.SEND_WELCOME_EMAIL }),
+  BullModule.registerQueue(
+    { name: QueuesConstant.SEND_WELCOME_EMAIL },
+    { name: QueuesConstant.DELETE_FILE }
+  ),
 ];
 
-const providerAndExports = [SendWelcomeEmailProcessor];
+const providerAndExports = [SendWelcomeEmailConsumer, DeleteFileConsumer];
 @Global()
 @Module({
   imports: [

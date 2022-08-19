@@ -20,12 +20,20 @@ import { UpdatePostDto } from "./dtos/updatePost.dto";
 
 import { PostRepository } from "./post.repository";
 import { getCategoriesData } from "./post.utility";
+import { InjectQueue } from "@nestjs/bull";
+import { QueuesConstant } from "../../shared/constants/queues.constant";
+import { Queue } from "bull";
+import { QueueDeleteFileCreate } from "../../shared/interfaces/queues.interface";
+import { CommentsRepository } from "../comments/comments.repository";
 
 @Injectable()
 export class PostService {
   constructor(
     private postRepository: PostRepository,
-    private categoriesRepository: CategoriesRepository
+    private categoriesRepository: CategoriesRepository,
+    @InjectQueue(QueuesConstant.DELETE_FILE)
+    private queueDeleteFile: Queue<QueueDeleteFileCreate>,
+    private commentsRepository: CommentsRepository
   ) {}
 
   async getPublicPosts(search: searchPostDto) {
@@ -187,14 +195,17 @@ export class PostService {
 
   async delete(userId: number, id: number) {
     try {
+      await this.commentsRepository.deleteCommentsByPostId(id); //Todo add to queue
+      await this.postRepository.deleteCategoriesOnPost(id);
       const post: Post = await this.postRepository.delete(id);
-      try {
-        await unlink(`./uploads/posts/${post.cover}`); //TODO ADD QUEUE
-      } catch (error) {
-      } finally {
-        return {};
-      }
+
+      await this.queueDeleteFile.add({
+        filename: post.cover,
+        filePath: "./uploads/posts/",
+        isFolder: false,
+      });
     } catch (error) {
+      console.log(error);
       throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"));
     }
   }
