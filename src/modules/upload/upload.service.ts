@@ -20,12 +20,6 @@ export class uploadService {
       if (!file)
         throw new BadRequestException(getResponseMessage("FILE_IS_REQUIRED"));
 
-      await this.resizeFileQueue.add({
-        filePath: file.path,
-        width: 500,
-        height: 500,
-      });
-
       const path_ = `./uploads/posts`;
 
       const state = await stat(path_);
@@ -33,6 +27,11 @@ export class uploadService {
         await mkdir(path_);
       }
 
+      await this.resizeFileQueue.add({
+        filePath: file.path,
+        width: 500,
+        height: 500,
+      });
       //   await writeFile(file.path, file);
 
       return file.filename;
