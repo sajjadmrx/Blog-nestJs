@@ -13,8 +13,10 @@ import { PostRepository } from "../post/post.repository";
 import {
   Comment,
   CommentWithChilds,
+  CommentWithRelation,
 } from "../../shared/interfaces/comment.interface";
 import { Role } from "../../shared/interfaces/role.interface";
+import { QueryDto } from "./dtos/query.dto";
 
 @Injectable()
 export class CommentsService {
@@ -22,6 +24,27 @@ export class CommentsService {
     private commentsRepository: CommentsRepository,
     private postsRepository: PostRepository
   ) {}
+
+  async getAll(query: QueryDto, user: User | null) {
+    try {
+      const postId: number = Number(query.postId);
+      const page: number = Number(query.page) || 1;
+      let limit: number = Number(query.limit) || 10;
+      let dbQuery: any = {};
+
+      if (limit > 10) limit = 10;
+      console.log(user);
+      if (!postId) {
+        //check User Roles
+      }
+
+      const comments: CommentWithRelation[] =
+        await this.commentsRepository.findByPostId(postId, page, limit);
+      return comments;
+    } catch (e) {
+      throw e;
+    }
+  }
 
   async create(data: CommentCreateDto, user: User) {
     const postId: number = data.postId;

@@ -4,6 +4,7 @@ import {
   Comment,
   CommentCreateInput,
   CommentWithChilds,
+  CommentWithRelation,
 } from "../../shared/interfaces/comment.interface";
 import { Prisma } from "@prisma/client";
 import { BatchPayload } from "../../shared/interfaces/repository.interface";
@@ -46,6 +47,45 @@ export class CommentsRepository {
   async deleteCommentsByPostId(postId: number): Promise<BatchPayload> {
     return this.db.comment.deleteMany({
       where: { postId },
+    });
+  }
+
+  async findByPostId(
+    postId: number,
+    page: number,
+    limit: number
+  ): Promise<CommentWithRelation[]> {
+    return this.db.comment.findMany({
+      where: {
+        postId: postId,
+      },
+      include: {
+        childs: true,
+        author: {
+          select: {
+            username: true,
+            id: true,
+          },
+        },
+      },
+      take: limit,
+      skip: (page - 1) * limit,
+    });
+  }
+
+  async find(page: number, limit: number): Promise<CommentWithRelation[]> {
+    return this.db.comment.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      include: {
+        childs: true,
+        author: {
+          select: {
+            username: true,
+            id: true,
+          },
+        },
+      },
     });
   }
 }

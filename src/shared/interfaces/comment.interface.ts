@@ -11,3 +11,10 @@ export interface CommentCreateInput
 export interface CommentWithChilds extends Comment {
   childs: Comment[];
 }
+
+export interface CommentWithRelation extends CommentWithChilds {
+  author: {
+    username: string;
+    id: number;
+  };
+}
