@@ -74,7 +74,7 @@ export class CommentsController {
     summary: "delete comment by commentId",
   })
   @ApiBearerAuth()
-  @UseGuards(CheckRoleGuard(["ADMIN", "USER"])) //ADMIN OR USER
+  @UseGuards(CheckRoleGuard(["ADMIN", "USER", "MANAGE_COMMENTS"])) //ADMIN OR USER(self comment)
   @UseGuards(authGuard(false))
   @Delete(":id")
   async delete(@Param("id") commentId: string, @getUser() user: User) {

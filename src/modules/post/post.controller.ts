@@ -63,7 +63,7 @@ export class PostController {
   })
   @ApiBearerAuth()
   @Post("/")
-  @UseGuards(CheckRoleGuard(["ADMIN"]))
+  @UseGuards(CheckRoleGuard(["ADMIN", "MANAGE_POSTS"]))
   @UseGuards(authGuard(false))
   async createPost(
     @getUser("id") userId: number,
@@ -78,7 +78,7 @@ export class PostController {
   })
   @ApiBearerAuth()
   @Patch(":id")
-  @UseGuards(CheckRoleGuard(["ADMIN"]))
+  @UseGuards(CheckRoleGuard(["ADMIN", "MANAGE_POSTS"]))
   @UseGuards(authGuard(false))
   async updatePost(
     @getUser("id") userId: number,
@@ -94,7 +94,7 @@ export class PostController {
   })
   @Delete(":id")
   @ApiBearerAuth()
-  @UseGuards(CheckRoleGuard(["ADMIN"]))
+  @UseGuards(CheckRoleGuard(["ADMIN", "MANAGE_POSTS"]))
   @UseGuards(authGuard(false))
   async deletePost(@getUser("id") userId: number, @Param("id") id: string) {
     return this.postService.delete(userId, Number(id));
