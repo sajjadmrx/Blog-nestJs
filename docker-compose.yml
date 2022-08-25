@@ -18,6 +18,8 @@ services:
     links:
       - redis
       - mysqldb
+    env_file:
+      - .env
     environment:
       - DATABASE_URL=mysql://admin:letmein@mysqldb:3306/blog
       - REDIS_URL=redis
