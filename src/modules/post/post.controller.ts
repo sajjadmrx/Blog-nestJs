@@ -30,6 +30,7 @@ import { UpdatePostDto } from "./dtos/updatePost.dto";
 
 import { PostService } from "./post.service";
 import { ResponseInterceptor } from "../../shared/interceptors/response.interceptor";
+import { authGuard } from "../../shared/guards/auth.guard";
 
 @ApiTags("Post")
 @UseInterceptors(ResponseInterceptor)
@@ -63,7 +64,7 @@ export class PostController {
   @ApiBearerAuth()
   @Post("/")
   @UseGuards(CheckRoleGuard(["ADMIN"]))
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(authGuard(false))
   async createPost(
     @getUser("id") userId: number,
     @Body() createPostDto: CreatePostDto
@@ -78,7 +79,7 @@ export class PostController {
   @ApiBearerAuth()
   @Patch(":id")
   @UseGuards(CheckRoleGuard(["ADMIN"]))
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(authGuard(false))
   async updatePost(
     @getUser("id") userId: number,
     @Param("id") id: string,
@@ -94,7 +95,7 @@ export class PostController {
   @Delete(":id")
   @ApiBearerAuth()
   @UseGuards(CheckRoleGuard(["ADMIN"]))
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(authGuard(false))
   async deletePost(@getUser("id") userId: number, @Param("id") id: string) {
     return this.postService.delete(userId, Number(id));
   }

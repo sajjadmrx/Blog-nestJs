@@ -33,9 +33,9 @@ export class CommentsService {
       let dbQuery: any = {};
 
       if (limit > 10) limit = 10;
-      console.log(user);
       if (!postId) {
-        //check User Roles
+        if (user && user.role != "ADMIN") return [];
+        return await this.commentsRepository.find(page, limit);
       }
 
       const comments: CommentWithRelation[] =

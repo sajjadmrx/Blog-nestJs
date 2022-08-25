@@ -23,6 +23,7 @@ import { User } from "../../shared/interfaces/user.interface";
 import CheckRoleGuard from "../../shared/guards/check-roles.guard";
 import { ResponseInterceptor } from "../../shared/interceptors/response.interceptor";
 import { QueryDto } from "./dtos/query.dto";
+import { authGuard } from "../../shared/guards/auth.guard";
 
 @ApiTags("Comment")
 @UseInterceptors(ResponseInterceptor)
@@ -51,6 +52,8 @@ export class CommentsController {
     type: String,
     required: false,
   })
+  @ApiBearerAuth()
+  @UseGuards(authGuard(true))
   @Get("")
   getAll(@Query() query: QueryDto, @getUser() user: User | null) {
     return this.commentsService.getAll(query, user);
@@ -61,7 +64,7 @@ export class CommentsController {
     description: "only Users",
   })
   @ApiBearerAuth()
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(authGuard(false))
   @Post()
   async create(@Body() data: CommentCreateDto, @getUser() user: User) {
     return this.commentsService.create(data, user);
@@ -72,7 +75,7 @@ export class CommentsController {
   })
   @ApiBearerAuth()
   @UseGuards(CheckRoleGuard(["ADMIN", "USER"])) //ADMIN OR USER
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(authGuard(false))
   @Delete(":id")
   async delete(@Param("id") commentId: string, @getUser() user: User) {
     return this.commentsService.delete(Number(commentId), user);

@@ -22,6 +22,7 @@ import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto } from "./dtos/create.dto";
 import { updateCategoryDto } from "./dtos/update.dto";
 import { ResponseInterceptor } from "../../shared/interceptors/response.interceptor";
+import { authGuard } from "../../shared/guards/auth.guard";
 
 @ApiTags("Categories")
 @UseInterceptors(ResponseInterceptor)
@@ -52,7 +53,7 @@ export class CategoriesController {
   @ApiBearerAuth()
   @Post("/")
   @UseGuards(CheckRoleGuard(["ADMIN"]))
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(authGuard(false))
   async createCategory(@Body() createDto: CreateCategoryDto) {
     return this.categoriesService.create(createDto);
   }
@@ -64,7 +65,7 @@ export class CategoriesController {
   @ApiBearerAuth()
   @Patch("/:id")
   @UseGuards(CheckRoleGuard(["ADMIN"]))
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(authGuard(false))
   async updateCategory(
     @Body() item: updateCategoryDto,
     @Param("id") id: string
@@ -79,7 +80,7 @@ export class CategoriesController {
   @ApiBearerAuth()
   @Delete("/:id")
   @UseGuards(CheckRoleGuard(["ADMIN"]))
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(authGuard(false))
   @ApiParam({ name: "id" })
   async deleteCategory(@Param("id") id: string) {
     return this.categoriesService.delete(Number(id));
