@@ -29,7 +29,9 @@
 # 📦 Docker
 ```bash
 docker-compose up -d
+> Host port 5000
 ```
+
 
 ## 📥Installation
 
@@ -52,6 +54,6 @@ $ npm run start:prod
 ```
 # 📝document
 swagger-ui
-> http://localhost:{port}/api/docs
+> http://localhost:{port}/api
 > 
 ![Swagger](/github/swagger.png)
