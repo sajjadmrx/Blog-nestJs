@@ -1,9 +1,10 @@
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { NestExpressApplication } from "@nestjs/platform-express";
+import { setupDocument } from "./document";
+import { ConfigService } from "@nestjs/config";
+
 (async () => {
   const port = process.env.PORT || 3000;
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -12,20 +13,9 @@ import { NestExpressApplication } from "@nestjs/platform-express";
   app.useStaticAssets("uploads", {
     prefix: "/uploads/",
   });
-  const configDocument = new DocumentBuilder()
-    .setTitle("Blog - NestJS")
-    .setDescription("The Blog API description")
-    .setVersion("1.0")
-    .addBearerAuth({
-      type: "http",
-      scheme: "bearer",
-      bearerFormat: "JWT",
-    })
-    .build();
-
-  const document = SwaggerModule.createDocument(app, configDocument);
-  SwaggerModule.setup("api/docs", app, document);
-
+  const configService: ConfigService = new ConfigService();
+  if (configService.get<string>("APP_MODE").toUpperCase() == "DEVELOPMENT")
+    setupDocument(app, "/api");
   await app.listen(port);
   console.log(`Server running on ${port}`);
 })();
