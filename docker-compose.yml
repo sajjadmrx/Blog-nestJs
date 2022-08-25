@@ -3,7 +3,6 @@ services:
 
   redis:
     image: redis
-    container_name: cache
     expose:
       - 6379
   app:
@@ -11,7 +10,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '3000:3000'
+      - '5000:3000'
     depends_on:
       - redis
       - mysqldb
