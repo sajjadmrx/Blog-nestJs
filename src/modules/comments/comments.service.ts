@@ -33,7 +33,9 @@ export class CommentsService {
       const hasComment: CommentWithChilds | null =
         await this.commentsRepository.getById(replyId);
       if (!hasComment)
-        throw new NotFoundException(getResponseMessage("NOT_FOUND")); //TODO better Message
+        throw new NotFoundException(
+          getResponseMessage("REPLY_COMMENT_NOT_FOUND")
+        );
     }
 
     const comment = await this.commentsRepository.create({
