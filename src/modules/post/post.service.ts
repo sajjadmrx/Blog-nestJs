@@ -195,7 +195,7 @@ export class PostService {
 
   async delete(userId: number, id: number) {
     try {
-      await this.commentsRepository.deleteCommentsByPostId(id); //Todo add to queue
+      await this.commentsRepository.deleteCommentsByPostId(id);
       await this.postRepository.deleteCategoriesOnPost(id);
       const post: Post = await this.postRepository.delete(id);
 

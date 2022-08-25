@@ -11,8 +11,8 @@ export class uploadService {
     try {
       if (!file)
         throw new BadRequestException(getResponseMessage("FILE_IS_REQUIRED"));
-
-      const buffer = await this.resizeService.withPath(file.path, 500, 500); //TODO Add To queue
+      console.log(file.path);
+      // const buffer = await this.resizeService.withPath(file.path, 500, 500); //TODO Add To queue
       //  await unlink(file.path)
       const path_ = `./uploads/posts`;
 
@@ -21,7 +21,7 @@ export class uploadService {
         await mkdir(path_);
       }
 
-      await writeFile(file.path, buffer);
+      //   await writeFile(file.path, file);
 
       return file.filename;
     } catch (error) {
