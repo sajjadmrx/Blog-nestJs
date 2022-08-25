@@ -9,3 +9,9 @@ export interface QueueDeleteFileCreate {
   filePath: string;
   isFolder: boolean;
 }
+
+export interface ReSizeFileQueue {
+  filePath: string;
+  width: number;
+  height: number;
+}
