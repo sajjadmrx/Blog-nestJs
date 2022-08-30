@@ -26,13 +26,17 @@ export class UsersService {
       const hasRole: RoleType | null = Role[role];
       if (!hasRole)
         throw new BadRequestException(getResponseMessage("INVALID_ROLE"));
-      await this.userRepo.update(userId, {
-        role: hasRole,
-      });
 
-      return hasRole;
+      try {
+        await this.userRepo.update(userId, {
+          role: hasRole,
+        });
+        return hasRole;
+      } catch (e) {
+        throw new BadRequestException(getResponseMessage("INVALID_USER_ID"));
+      }
     } catch (error) {
-      throw new BadRequestException(getResponseMessage("INVALID_USER_ID"));
+      throw error;
     }
   }
 }
