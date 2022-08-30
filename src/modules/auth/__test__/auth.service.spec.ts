@@ -5,8 +5,8 @@ import { Prisma, User } from "@prisma/client";
 import { UsersRepository } from "../../users/users.repository";
 import { Queue } from "bull";
 import { QueuesWelcomeEmailCreate } from "../../../shared/interfaces/queues.interface";
-import { BadRequestException } from "@nestjs/common";
-
+import { BadRequestException, UnauthorizedException } from "@nestjs/common";
+import bcrypt, { compare } from "bcrypt";
 const user: User = {
   username: "mrx",
   email: "mrx@gmail.com",
@@ -41,8 +41,8 @@ describe("AuthService", function () {
     );
   });
 
-  it("should pass test", () => {
-    expect(authService).toBeTruthy();
+  it("should Defined", () => {
+    expect(authService).toBeDefined();
   });
 
   describe("signUp", function () {
@@ -81,6 +81,47 @@ describe("AuthService", function () {
 
       await authService.signUp(input);
       await expect(queueSendWelcomeEmail.add).toBeCalled();
+    });
+  });
+
+  describe("signIn", function () {
+    it("should reject 'invalid credentials' when user not found", async () => {
+      jest
+        .spyOn(usersRepository, "findOneByUsername")
+        .mockImplementation(() => null);
+      await expect(
+        authService.signIn({
+          username: input.username,
+          password: input.password,
+        })
+      ).rejects.toEqual(new UnauthorizedException("invalid credentials"));
+    });
+    it("should reject 'invalid credentials' when password not Matching", async () => {
+      jest
+        .spyOn(usersRepository, "findOneByUsername")
+        .mockImplementation(() => Promise.resolve(user));
+      jest
+        .spyOn(bcrypt, "compare")
+        .mockImplementation(async (pass: string, hash: string) =>
+          Promise.resolve(false)
+        );
+      await expect(
+        authService.signIn({
+          username: input.username,
+          password: input.password,
+        })
+      ).rejects.toEqual(new UnauthorizedException("invalid credentials"));
+    });
+    it("should return jwt code when password is Matching", async () => {
+      jest
+        .spyOn(usersRepository, "findOneByUsername")
+        .mockImplementation(async () => user);
+
+      jest.spyOn(bcrypt, "compare").mockImplementation(async () => true);
+
+      jest.spyOn(jwtService, "sign").mockImplementation(() => "token");
+
+      await expect(authService.signIn(input)).resolves.toBe("token");
     });
   });
 });
