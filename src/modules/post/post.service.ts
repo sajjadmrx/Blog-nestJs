@@ -77,13 +77,7 @@ export class PostService {
 
       if (!post || !post.published)
         throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"));
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-        data: {
-          post,
-        },
-      });
+      return post;
     } catch (error) {
       throw error;
     }
