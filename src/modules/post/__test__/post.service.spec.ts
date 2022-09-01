@@ -3,6 +3,13 @@ import { PostRepository } from "../post.repository";
 import { Post } from "../../../shared/interfaces/post.interface";
 import { BadRequestException } from "@nestjs/common";
 import { getResponseMessage } from "../../../shared/constants/messages.constant";
+import * as fs from "fs";
+import { fileHasExist } from "../../../shared/functions/fileValidator.func";
+import * as fileValidator from "../../../shared/functions/fileValidator.func";
+import exp from "constants";
+import { CategoriesRepository } from "../../categories/categories.repository";
+import { async } from "rxjs";
+import { create } from "domain";
 
 let post: Post = {
   id: 1,
@@ -16,13 +23,33 @@ let post: Post = {
   updatedAt: new Date(),
 };
 
+let postInput = {
+  content: "test",
+  cover: "my-cover.png",
+  tags: ["AAA"],
+  published: false,
+  title: "test",
+  categories: [1, 2],
+};
+
 describe("PostService", function () {
   let postService: PostService;
   let postRepository: PostRepository;
+  let categoriesRepository: CategoriesRepository;
+
   beforeEach(() => {
+    jest.clearAllMocks();
     const fnMock = jest.fn() as unknown as any;
     postRepository = new PostRepository(jest.fn() as unknown as any);
-    postService = new PostService(postRepository, fnMock, fnMock, fnMock);
+    categoriesRepository = new CategoriesRepository(
+      jest.fn() as unknown as any
+    );
+    postService = new PostService(
+      postRepository,
+      categoriesRepository,
+      fnMock,
+      fnMock
+    );
   });
 
   it("should Defined", () => {
@@ -47,7 +74,7 @@ describe("PostService", function () {
         new BadRequestException(getResponseMessage("POST_NOT_EXIST"))
       );
     });
-    it("should return post when found post", async () => {
+    it("should return post", async () => {
       post.published = true;
       jest
         .spyOn(postRepository, "findById")
@@ -58,8 +85,69 @@ describe("PostService", function () {
       jest.spyOn(postRepository, "findById").mockImplementation(() => {
         throw new Error("request time out!");
       });
-
       await expect(postService.singlePost(post.id)).rejects.toThrowError();
+    });
+  });
+
+  describe("create()", function () {
+    describe("cover", function () {
+      it("should throw FILE_NOT_EXIST,when set unknown cover image", async () => {
+        jest
+          .spyOn(fileValidator, "fileHasExist")
+          .mockImplementation(async () => false);
+
+        await expect(postService.create(1, postInput)).rejects.toEqual(
+          new BadRequestException("FILE_NOT_EXIST")
+        );
+      });
+      it("should ignore file check, when file field is null", async () => {
+        jest
+          .spyOn(fileValidator, "fileHasExist")
+          .mockImplementation(async () => true);
+
+        postInput.cover = null;
+
+        await expect(postService.create(1, postInput)).rejects.toThrowError();
+
+        expect(fileValidator.fileHasExist).not.toBeCalled();
+      });
+    });
+
+    describe("categories", function () {
+      it("should throw CATEGORIES_NOT_EXIST,when set unknown categories", async () => {
+        postInput.cover = null;
+        jest
+          .spyOn(categoriesRepository, "hasExistWithIds")
+          .mockImplementation(async () => false);
+        await expect(postService.create(1, postInput)).rejects.toEqual(
+          new BadRequestException(getResponseMessage("CATEGORIES_NOT_EXIST"))
+        );
+      });
+    });
+
+    describe("tags", function () {
+      it("should throw TAGS_INVALID, when tags not array", async () => {
+        postInput.tags = "test" as unknown as any;
+        postInput.cover = null;
+        jest
+          .spyOn(categoriesRepository, "hasExistWithIds")
+          .mockImplementation(async (args) => true);
+
+        await expect(postService.create(1, postInput)).rejects.toEqual(
+          new BadRequestException(getResponseMessage("TAGS_INVALID"))
+        );
+      });
+    });
+
+    it("should return created post", async () => {
+      jest
+        .spyOn(fileValidator, "fileHasExist")
+        .mockImplementation(async () => true);
+      jest
+        .spyOn(categoriesRepository, "hasExistWithIds")
+        .mockImplementation(async () => true);
+      jest.spyOn(postRepository, "create").mockImplementation(async () => post);
+      await expect(postService.create(1, postInput)).resolves.toEqual(post);
     });
   });
 });

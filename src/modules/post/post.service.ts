@@ -100,25 +100,26 @@ export class PostService {
           await this.categoriesRepository.hasExistWithIds(
             createPostDto.categories
           );
-        if (!valiadate) throw new Error("catch");
+        if (!valiadate)
+          throw new BadRequestException(
+            getResponseMessage("CATEGORIES_NOT_EXIST")
+          );
       } catch (error) {
-        throw new BadRequestException(
-          getResponseMessage("CATEGORIES_NOT_EXIST")
-        );
+        throw error;
       }
 
       let tags: string;
       try {
         if (Array.isArray(createPostDto.tags))
           tags = JSON.stringify(createPostDto.tags);
-        else throw new Error("catch");
+        else throw new BadRequestException(getResponseMessage("TAGS_INVALID"));
       } catch (error) {
-        throw new BadRequestException(getResponseMessage("TAGS_INVALID"));
+        throw error;
       }
 
       const postInput: PostCreateInput = {
         ...createPostDto,
-        tags: JSON.stringify(tags),
+        tags: tags,
         authorId: userId,
         cover: createPostDto.cover || "default.png",
         categories: {
@@ -128,7 +129,7 @@ export class PostService {
 
       const post = await this.postRepository.create(postInput);
 
-      return post.id;
+      return post;
     } catch (error) {
       throw error;
     }
