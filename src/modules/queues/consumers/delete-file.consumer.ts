@@ -1,7 +1,7 @@
 import { OnQueueError, Process, Processor } from "@nestjs/bull";
 import { QueuesConstant } from "../../../shared/constants/queues.constant";
 import { Job } from "bull";
-import { QueueDeleteFileCreate } from "../../../shared/interfaces/queues.interface";
+import { deleteFileQueue } from "../../../shared/interfaces/queues.interface";
 import { fileHasExist } from "../../../shared/functions/fileValidator.func";
 import { promises as fs } from "fs";
 import path from "path";
@@ -11,7 +11,7 @@ export class DeleteFileConsumer {
   constructor() {}
 
   @Process()
-  async handleDeleteFile(job: Job<QueueDeleteFileCreate>) {
+  async handleDeleteFile(job: Job<deleteFileQueue>) {
     try {
       const isFolder: boolean = job.data.isFolder;
       const fileName: string = job.data.filename;

@@ -1,10 +1,10 @@
 import { User } from "./user.interface";
 
-export interface QueuesWelcomeEmailCreate {
+export interface welcomeEmailQueue {
   user: User;
 }
 
-export interface QueueDeleteFileCreate {
+export interface deleteFileQueue {
   filename: string;
   filePath: string;
   isFolder: boolean;

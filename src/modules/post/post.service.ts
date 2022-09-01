@@ -24,7 +24,7 @@ import { getCategoriesData } from "./post.utility";
 import { InjectQueue } from "@nestjs/bull";
 import { QueuesConstant } from "../../shared/constants/queues.constant";
 import { Queue } from "bull";
-import { QueueDeleteFileCreate } from "../../shared/interfaces/queues.interface";
+import { deleteFileQueue } from "../../shared/interfaces/queues.interface";
 import { CommentsRepository } from "../comments/comments.repository";
 
 @Injectable()
@@ -33,7 +33,7 @@ export class PostService {
     private postRepository: PostRepository,
     private categoriesRepository: CategoriesRepository,
     @InjectQueue(QueuesConstant.DELETE_FILE)
-    private queueDeleteFile: Queue<QueueDeleteFileCreate>,
+    private deleteFileQueue: Queue<deleteFileQueue>,
     private commentsRepository: CommentsRepository
   ) {}
 
@@ -199,7 +199,7 @@ export class PostService {
 
       const deletedPost: Post = await this.postRepository.delete(id);
 
-      await this.queueDeleteFile.add({
+      await this.deleteFileQueue.add({
         filename: deletedPost.cover,
         filePath: "./uploads/posts/",
         isFolder: false,

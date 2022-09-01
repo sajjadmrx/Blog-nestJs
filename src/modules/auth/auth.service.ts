@@ -16,7 +16,7 @@ import { MailService } from "../mail/mail.service";
 import { InjectQueue } from "@nestjs/bull";
 import { QueuesConstant } from "../../shared/constants/queues.constant";
 import { Queue } from "bull";
-import { QueuesWelcomeEmailCreate } from "../../shared/interfaces/queues.interface";
+import { welcomeEmailQueue } from "../../shared/interfaces/queues.interface";
 
 @Injectable()
 export class AuthService {
@@ -25,7 +25,7 @@ export class AuthService {
     private jwtService: JwtService,
     //private mailService: MailService,
     @InjectQueue(QueuesConstant.SEND_WELCOME_EMAIL)
-    private queueSendWelcomeEmail: Queue<QueuesWelcomeEmailCreate>
+    private queueSendWelcomeEmail: Queue<welcomeEmailQueue>
   ) {}
 
   async signUp(userDto: SignUpDto) {

@@ -4,7 +4,7 @@ import { JwtModule, JwtService } from "@nestjs/jwt";
 import { Prisma, User } from "@prisma/client";
 import { UsersRepository } from "../../users/users.repository";
 import { Queue } from "bull";
-import { QueuesWelcomeEmailCreate } from "../../../shared/interfaces/queues.interface";
+import { welcomeEmailQueue } from "../../../shared/interfaces/queues.interface";
 import { BadRequestException, UnauthorizedException } from "@nestjs/common";
 import bcrypt, { compare } from "bcrypt";
 const user: User = {
@@ -27,17 +27,17 @@ describe("AuthService", function () {
   let authService: AuthService;
   let usersRepository: UsersRepository;
   let jwtService: JwtService;
-  let queueSendWelcomeEmail;
+  let sendWelcomeEmailQueue;
   beforeEach(async () => {
     usersRepository = new UsersRepository(jest.fn() as unknown as any);
     jwtService = new JwtService();
-    queueSendWelcomeEmail = {
+    sendWelcomeEmailQueue = {
       add: jest.fn(),
-    } as unknown as Queue<QueuesWelcomeEmailCreate>;
+    } as unknown as Queue<welcomeEmailQueue>;
     authService = new AuthService(
       usersRepository,
       jwtService,
-      queueSendWelcomeEmail
+      sendWelcomeEmailQueue
     );
   });
 
@@ -80,7 +80,7 @@ describe("AuthService", function () {
       jest.spyOn(jwtService, "sign").mockReturnValue(token);
 
       await authService.signUp(input);
-      await expect(queueSendWelcomeEmail.add).toBeCalled();
+      await expect(sendWelcomeEmailQueue.add).toBeCalled();
     });
   });
 

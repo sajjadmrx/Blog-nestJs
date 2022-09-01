@@ -1,7 +1,7 @@
 import { OnQueueCompleted, Process, Processor } from "@nestjs/bull";
 import { QueuesConstant } from "../../../shared/constants/queues.constant";
 import { Job } from "bull";
-import { QueuesWelcomeEmailCreate } from "../../../shared/interfaces/queues.interface";
+import { welcomeEmailQueue } from "../../../shared/interfaces/queues.interface";
 import { MailService } from "../../mail/mail.service";
 import { User } from "../../../shared/interfaces/user.interface";
 
@@ -9,7 +9,7 @@ import { User } from "../../../shared/interfaces/user.interface";
 export class SendWelcomeEmailConsumer {
   constructor(private mailService: MailService) {}
   @Process()
-  async handleSender(job: Job<QueuesWelcomeEmailCreate>): Promise<void> {
+  async handleSender(job: Job<welcomeEmailQueue>): Promise<void> {
     try {
       const user: User = job.data.user;
       await this.mailService.sendWelcome(user);
@@ -19,7 +19,7 @@ export class SendWelcomeEmailConsumer {
   }
 
   @OnQueueCompleted()
-  logCompleted(job: Job<QueuesWelcomeEmailCreate>) {
+  logCompleted(job: Job<welcomeEmailQueue>) {
     console.log(`Completed: ${job.id}`);
   }
 }
