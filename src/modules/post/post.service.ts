@@ -3,6 +3,7 @@ import {
   HttpCode,
   HttpStatus,
   Injectable,
+  NotFoundException,
 } from "@nestjs/common";
 import { unlink } from "fs/promises";
 import { getResponseMessage } from "src/shared/constants/messages.constant";
@@ -137,6 +138,10 @@ export class PostService {
 
   async update(userId: number, id: number, updatePostDto: UpdatePostDto) {
     try {
+      const post: Post | null = await this.postRepository.findById(id);
+      if (!post)
+        throw new NotFoundException(getResponseMessage("POST_NOT_EXIST"));
+
       if (updatePostDto.cover) {
         const hasExist: boolean = await fileHasExist(
           updatePostDto.cover,
@@ -175,13 +180,7 @@ export class PostService {
         },
         cover: updatePostDto.cover || "default.png",
       };
-
-      try {
-        await this.postRepository.update(id, data);
-      } catch (error) {
-        throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"));
-      }
-
+      await this.postRepository.update(id, data);
       return {};
     } catch (error) {
       throw error;

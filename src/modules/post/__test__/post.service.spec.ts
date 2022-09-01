@@ -3,13 +3,9 @@ import { PostRepository } from "../post.repository";
 import { Post } from "../../../shared/interfaces/post.interface";
 import { BadRequestException } from "@nestjs/common";
 import { getResponseMessage } from "../../../shared/constants/messages.constant";
-import * as fs from "fs";
 import { fileHasExist } from "../../../shared/functions/fileValidator.func";
 import * as fileValidator from "../../../shared/functions/fileValidator.func";
-import exp from "constants";
 import { CategoriesRepository } from "../../categories/categories.repository";
-import { async } from "rxjs";
-import { create } from "domain";
 
 let post: Post = {
   id: 1,
@@ -148,6 +144,18 @@ describe("PostService", function () {
         .mockImplementation(async () => true);
       jest.spyOn(postRepository, "create").mockImplementation(async () => post);
       await expect(postService.create(1, postInput)).resolves.toEqual(post);
+    });
+  });
+
+  describe("update()", function () {
+    it("should throw POST_NOT_EXIST,when not found post", async () => {
+      jest
+        .spyOn(postRepository, "findById")
+        .mockImplementation(async () => null);
+
+      await expect(postService.update(1, 2, postInput)).rejects.toEqual(
+        new BadRequestException(getResponseMessage("POST_NOT_EXIST"))
+      );
     });
   });
 });
