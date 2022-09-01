@@ -189,17 +189,24 @@ export class PostService {
 
   async delete(userId: number, id: number) {
     try {
+      const post: Post | null = await this.postRepository.findById(id);
+      if (!post)
+        throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"));
+
       await this.commentsRepository.deleteCommentsByPostId(id);
+
       await this.postRepository.deleteCategoriesOnPost(id);
-      const post: Post = await this.postRepository.delete(id);
+
+      const deletedPost: Post = await this.postRepository.delete(id);
 
       await this.queueDeleteFile.add({
-        filename: post.cover,
+        filename: deletedPost.cover,
         filePath: "./uploads/posts/",
         isFolder: false,
       });
+      return post.id;
     } catch (error) {
-      throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"));
+      throw error;
     }
   }
 }
