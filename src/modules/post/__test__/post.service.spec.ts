@@ -197,4 +197,103 @@ describe("PostService", function () {
       expect(queueDeleteFile.add).toBeCalledTimes(1);
     });
   });
+  describe("getPublicPosts()", function () {
+    const posts: Post[] = [
+      post,
+      {
+        id: 2,
+        tags: "a,b,c",
+        cover: "googlelogo.png",
+        published: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        title: "Hello World!",
+        content: "just Hello World! 🤞",
+        authorId: 3,
+      },
+      {
+        id: 3,
+        tags: "a,b,c",
+        cover: "googlelogo.png",
+        published: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        title: "Hello World!",
+        content: "just Hello World! 🤞",
+        authorId: 3,
+      },
+    ];
+    it("should return posts by matched title", async () => {
+      const query = {
+        content: "",
+        title: "hello",
+        limit: 10,
+        page: 1,
+      };
+      const finallyPosts = posts.filter(
+        (post: Post) =>
+          post.title.toLowerCase().match(query.title) && post.published == true
+      );
+
+      jest.spyOn(postRepository, "findPublic").mockImplementation(async () => {
+        return finallyPosts;
+      });
+
+      jest
+        .spyOn(postRepository, "countPublished")
+        .mockImplementation(async () => {
+          return posts.filter((post) => post.published).length;
+        });
+      const result = await postService.getPublicPosts(query);
+      expect(result.posts).toHaveLength(finallyPosts.length);
+    });
+    it("should return posts by matched content", async () => {
+      const query = {
+        content: "just",
+        title: "hello",
+        limit: 10,
+        page: 1,
+      };
+      const finallyPosts = posts.filter(
+        (post: Post) =>
+          post.content.toLowerCase().match(query.content) &&
+          post.published == true
+      );
+
+      jest.spyOn(postRepository, "findPublic").mockImplementation(async () => {
+        return finallyPosts;
+      });
+
+      jest
+        .spyOn(postRepository, "countPublished")
+        .mockImplementation(async () => {
+          return posts.filter((post) => post.published).length;
+        });
+      const result = await postService.getPublicPosts(query);
+      expect(result.posts).toHaveLength(finallyPosts.length);
+    });
+    it("should return all post", async () => {
+      const query = {
+        content: "",
+        title: "",
+        limit: 10,
+        page: 1,
+      };
+      const finallyPosts = posts.filter((post: Post) => post.published == true);
+
+      jest.spyOn(postRepository, "findPublic").mockImplementation(async () => {
+        return finallyPosts;
+      });
+
+      jest
+        .spyOn(postRepository, "countPublished")
+        .mockImplementation(async () => {
+          return finallyPosts.length;
+        });
+
+      const result = await postService.getPublicPosts(query);
+      expect(result.posts).toHaveLength(finallyPosts.length);
+      expect(result.total).toBe(finallyPosts.length);
+    });
+  });
 });
