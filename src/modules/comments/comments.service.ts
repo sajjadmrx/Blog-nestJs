@@ -47,27 +47,31 @@ export class CommentsService {
   }
 
   async create(data: CommentCreateDto, user: User) {
-    const postId: number = data.postId;
-    const hasPost = await this.postsRepository.findById(postId);
-    if (!hasPost)
-      throw new NotFoundException(getResponseMessage("POST_NOT_EXIST"));
-    const replyId: number | null = data.replyId;
-    if (replyId) {
-      const hasComment: CommentWithChilds | null =
-        await this.commentsRepository.getById(replyId);
-      if (!hasComment)
-        throw new NotFoundException(
-          getResponseMessage("REPLY_COMMENT_NOT_FOUND")
-        );
-    }
+    try {
+      const postId: number = data.postId;
+      const hasPost = await this.postsRepository.findById(postId);
+      if (!hasPost || !hasPost.published)
+        throw new NotFoundException(getResponseMessage("POST_NOT_EXIST"));
+      const replyId: number | null = data.replyId;
+      if (replyId) {
+        const hasComment: CommentWithChilds | null =
+          await this.commentsRepository.getById(replyId);
+        if (!hasComment)
+          throw new NotFoundException(
+            getResponseMessage("REPLY_COMMENT_NOT_FOUND")
+          );
+      }
 
-    const comment = await this.commentsRepository.create({
-      postId,
-      replyId,
-      text: data.text,
-      authorId: user.id,
-    });
-    return comment.id;
+      const comment = await this.commentsRepository.create({
+        postId,
+        replyId,
+        text: data.text,
+        authorId: user.id,
+      });
+      return comment.id;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async delete(commentId: number, user: User) {
