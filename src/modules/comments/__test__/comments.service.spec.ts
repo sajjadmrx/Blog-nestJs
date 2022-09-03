@@ -1,10 +1,13 @@
 import { CommentsService } from "../comments.service";
 import { CommentsRepository } from "../comments.repository";
 import { PostRepository } from "../../post/post.repository";
-import { BadRequestException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException } from "@nestjs/common";
 import { getResponseMessage } from "../../../shared/constants/messages.constant";
 import { Post } from "../../../shared/interfaces/post.interface";
-import { Comment } from "../../../shared/interfaces/comment.interface";
+import {
+  Comment,
+  CommentWithChilds,
+} from "../../../shared/interfaces/comment.interface";
 
 let post: Post = {
   id: 1,
@@ -19,11 +22,23 @@ let post: Post = {
 };
 
 describe("CommentsService", function () {
+  let comment: Comment;
+
   let commentsService: CommentsService;
   let commentsRepository: CommentsRepository;
   let postRepository: PostRepository;
 
   beforeEach(() => {
+    jest.clearAllMocks();
+    comment = {
+      id: 1,
+      authorId: 2,
+      updatedAt: new Date(),
+      createdAt: new Date(),
+      replyId: 1,
+      text: "test",
+      postId: 3,
+    };
     const mockFn = jest.fn() as unknown as any;
     commentsRepository = new CommentsRepository(mockFn);
     postRepository = new PostRepository(mockFn);
@@ -35,15 +50,6 @@ describe("CommentsService", function () {
   });
   describe("create()", function () {
     let commentInput = { postId: 1, text: "Hello", replyId: null };
-    let comment: Comment = {
-      id: 1,
-      authorId: 2,
-      updatedAt: new Date(),
-      createdAt: new Date(),
-      replyId: 1,
-      text: "test",
-      postId: 3,
-    };
     it("should throw POST_NOT_EXIST,when not found post", async () => {
       jest.spyOn(postRepository, "findById").mockImplementation(() => null);
 
@@ -66,6 +72,7 @@ describe("CommentsService", function () {
       );
     });
     it("should throw REPLY_COMMENT_NOT_FOUND,when comment not found", async () => {
+      post.published = true;
       jest
         .spyOn(postRepository, "findById")
         .mockImplementation(async () => post);
@@ -114,6 +121,73 @@ describe("CommentsService", function () {
       expect(
         commentsService.create(commentInput, { id: comment.authorId } as any)
       ).resolves.toBe(comment.id);
+    });
+  });
+
+  describe("delete()", function () {
+    it("should throw NOT_FOUND,when comment not found", async function () {
+      jest
+        .spyOn(commentsRepository, "getById")
+        .mockImplementation(async () => null);
+
+      await expect(
+        commentsService.delete(comment.id, {} as any)
+      ).rejects.toThrow(
+        new BadRequestException(getResponseMessage("NOT_FOUND"))
+      );
+    });
+    it("should throw PERMISSION_DENIED,when userId not-equal authorId", async () => {
+      jest
+        .spyOn(commentsRepository, "getById")
+        .mockImplementation(
+          async () => comment as unknown as CommentWithChilds
+        );
+      await expect(
+        commentsService.delete(comment.id, { id: 3, role: ["USER"] } as any)
+      ).rejects.toThrow(new ForbiddenException("PERMISSION_DENIED"));
+    });
+    it("should throw PERMISSION_DENIED,when user not Admin", async () => {
+      jest
+        .spyOn(commentsRepository, "getById")
+        .mockImplementation(
+          async () => comment as unknown as CommentWithChilds
+        );
+      await expect(
+        commentsService.delete(comment.id, { id: 9999, role: ["USER"] } as any)
+      ).rejects.toThrow(new ForbiddenException("PERMISSION_DENIED"));
+    });
+    it("should called deleteChilds,when comment include replies", async () => {
+      const child = comment;
+      child.id = 6;
+      child.replyId = comment.id;
+      const finallyComment: CommentWithChilds =
+        comment && ({ childs: [child] } as unknown as CommentWithChilds);
+
+      jest
+        .spyOn(commentsRepository, "getById")
+        .mockImplementation(async () => finallyComment);
+
+      jest.spyOn(commentsRepository, "deleteChilds").mockImplementation();
+
+      await expect(
+        commentsService.delete(comment.id, { role: ["ADMIN"], id: 1 } as any)
+      ).rejects.toThrow();
+
+      expect(commentsRepository.deleteChilds).toBeCalled();
+    });
+    it("should called deleteOne & delete a comment", async () => {
+      const finallyComment: CommentWithChilds =
+        comment && ({ childs: [] } as unknown as CommentWithChilds);
+      jest
+        .spyOn(commentsRepository, "getById")
+        .mockImplementation(async () => finallyComment);
+      jest.spyOn(commentsRepository, "deleteOne").mockImplementation();
+
+      await expect(
+        commentsService.delete(comment.id, { role: ["ADMIN"], id: 1 } as any)
+      ).resolves.toEqual({});
+
+      expect(commentsRepository.deleteOne).toBeCalled();
     });
   });
 });
