@@ -8,14 +8,27 @@ import { ConfigService } from "@nestjs/config";
 (async () => {
   const port = process.env.PORT || 3000;
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
   app.useGlobalPipes(new ValidationPipe());
+
   app.setGlobalPrefix("api/v1");
+
   app.useStaticAssets("uploads", {
     prefix: "/uploads/",
   });
+
   const configService: ConfigService = new ConfigService();
-  if (configService.get<string>("APP_MODE").toUpperCase() == "DEVELOPMENT")
-    setupDocument(app, "/api");
+
+  const isDevelopmentMode: boolean =
+    configService.get<string>("APP_MODE").toUpperCase() == "DEVELOPMENT";
+
+  const DOCUMENT_ROUTE: string = "/api";
+
+  if (isDevelopmentMode) setupDocument(app, DOCUMENT_ROUTE);
+
   await app.listen(port);
+
   console.log(`Server running on ${port}`);
+
+  isDevelopmentMode && console.log(`http://localhost:${port}${DOCUMENT_ROUTE}`);
 })();
