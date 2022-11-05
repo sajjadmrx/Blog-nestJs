@@ -1,12 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
 import {
   Post,
   PostCreateInput,
   PostUpdateInput,
 } from "src/shared/interfaces/post.interface";
 import { PrismaService } from "../prisma/prisma.service";
-import { BatchPayload } from "../../shared/interfaces/repository.interface";
 
 @Injectable()
 export class PostRepository {
@@ -86,11 +84,6 @@ export class PostRepository {
       where: {
         id,
       },
-    });
-  }
-  async deleteCategoriesOnPost(postId: number): Promise<BatchPayload> {
-    return this.prisma.categoriesOnPosts.deleteMany({
-      where: { postId },
     });
   }
 }

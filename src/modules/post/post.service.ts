@@ -1,14 +1,12 @@
+import { Queue } from "bull";
+import { InjectQueue } from "@nestjs/bull";
 import {
   BadRequestException,
-  HttpCode,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { unlink } from "fs/promises";
 import { getResponseMessage } from "src/shared/constants/messages.constant";
 import { fileHasExist } from "src/shared/functions/fileValidator.func";
-import { responseData } from "src/shared/functions/response.func";
 import {
   Post,
   PostCreateInput,
@@ -18,14 +16,10 @@ import { CategoriesRepository } from "../categories/categories.repository";
 import { CreatePostDto } from "./dtos/createPost.dto";
 import { searchPostDto } from "./dtos/search.dto";
 import { UpdatePostDto } from "./dtos/updatePost.dto";
-
 import { PostRepository } from "./post.repository";
 import { getCategoriesData } from "./post.utility";
-import { InjectQueue } from "@nestjs/bull";
 import { QueuesConstant } from "../../shared/constants/queues.constant";
-import { Queue } from "bull";
 import { deleteFileQueue } from "../../shared/interfaces/queues.interface";
-import { CommentsRepository } from "../comments/comments.repository";
 
 @Injectable()
 export class PostService {
@@ -33,8 +27,7 @@ export class PostService {
     private postRepository: PostRepository,
     private categoriesRepository: CategoriesRepository,
     @InjectQueue(QueuesConstant.DELETE_FILE)
-    private deleteFileQueue: Queue<deleteFileQueue>,
-    private commentsRepository: CommentsRepository
+    private deleteFileQueue: Queue<deleteFileQueue>
   ) {}
 
   async getPublicPosts(search: searchPostDto) {
@@ -97,11 +90,11 @@ export class PostService {
       }
 
       try {
-        const valiadate: boolean =
+        const validate: boolean =
           await this.categoriesRepository.hasExistWithIds(
             createPostDto.categories
           );
-        if (!valiadate)
+        if (!validate)
           throw new BadRequestException(
             getResponseMessage("CATEGORIES_NOT_EXIST")
           );
@@ -192,10 +185,6 @@ export class PostService {
       const post: Post | null = await this.postRepository.findById(id);
       if (!post)
         throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"));
-
-      await this.commentsRepository.deleteCommentsByPostId(id);
-
-      await this.postRepository.deleteCategoriesOnPost(id);
 
       const deletedPost: Post = await this.postRepository.delete(id);
 

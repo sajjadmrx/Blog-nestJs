@@ -6,7 +6,7 @@ import { getResponseMessage } from "../../../shared/constants/messages.constant"
 import { fileHasExist } from "../../../shared/functions/fileValidator.func";
 import * as fileValidator from "../../../shared/functions/fileValidator.func";
 import { CategoriesRepository } from "../../categories/categories.repository";
-import { CommentsRepository } from "../../comments/comments.repository";
+import { CreatePostDto } from "../dtos/createPost.dto";
 
 let post: Post = {
   id: 1,
@@ -20,26 +20,25 @@ let post: Post = {
   updatedAt: new Date(),
 };
 
-let postInput = {
-  content: "test",
-  cover: "my-cover.png",
-  tags: ["AAA"],
-  published: false,
-  title: "test",
-  categories: [1, 2],
+let getPostInput = (): CreatePostDto => {
+  return {
+    content: "test",
+    cover: "my-cover.png",
+    tags: ["AAA"],
+    published: false,
+    title: "test",
+    categories: [1, 2],
+  };
 };
 
 describe("PostService", function () {
   let postService: PostService;
   let postRepository: PostRepository;
   let categoriesRepository: CategoriesRepository;
-  let commentsRepository: CommentsRepository;
   let queueDeleteFile;
   beforeEach(() => {
     jest.clearAllMocks();
-    const fnMock = jest.fn() as unknown as any;
     postRepository = new PostRepository(jest.fn() as unknown as any);
-    commentsRepository = new CommentsRepository(fnMock);
     categoriesRepository = new CategoriesRepository(
       jest.fn() as unknown as any
     );
@@ -49,8 +48,7 @@ describe("PostService", function () {
     postService = new PostService(
       postRepository,
       categoriesRepository,
-      queueDeleteFile,
-      commentsRepository
+      queueDeleteFile
     );
   });
 
@@ -98,11 +96,12 @@ describe("PostService", function () {
           .spyOn(fileValidator, "fileHasExist")
           .mockImplementation(async () => false);
 
-        await expect(postService.create(1, postInput)).rejects.toEqual(
+        await expect(postService.create(1, getPostInput())).rejects.toEqual(
           new BadRequestException("FILE_NOT_EXIST")
         );
       });
       it("should ignore file check, when file field is null", async () => {
+        const postInput = getPostInput();
         jest
           .spyOn(fileValidator, "fileHasExist")
           .mockImplementation(async () => true);
@@ -117,6 +116,7 @@ describe("PostService", function () {
 
     describe("categories", function () {
       it("should throw CATEGORIES_NOT_EXIST,when set unknown categories", async () => {
+        const postInput = getPostInput();
         postInput.cover = null;
         jest
           .spyOn(categoriesRepository, "hasExistWithIds")
@@ -129,6 +129,7 @@ describe("PostService", function () {
 
     describe("tags", function () {
       it("should throw TAGS_INVALID, when tags not array", async () => {
+        const postInput = getPostInput();
         postInput.tags = "test" as unknown as any;
         postInput.cover = null;
         jest
@@ -142,19 +143,24 @@ describe("PostService", function () {
     });
 
     it("should return created post", async () => {
+      const postInput = getPostInput();
       jest
         .spyOn(fileValidator, "fileHasExist")
         .mockImplementation(async () => true);
+
       jest
         .spyOn(categoriesRepository, "hasExistWithIds")
         .mockImplementation(async () => true);
+
       jest.spyOn(postRepository, "create").mockImplementation(async () => post);
+
       await expect(postService.create(1, postInput)).resolves.toEqual(post);
     });
   });
 
   describe("update()", function () {
     it("should throw POST_NOT_EXIST,when not found post", async () => {
+      const postInput = getPostInput();
       jest
         .spyOn(postRepository, "findById")
         .mockImplementation(async () => null);
@@ -178,10 +184,7 @@ describe("PostService", function () {
         .spyOn(postRepository, "findById")
         .mockImplementation(async () => post);
       jest.spyOn(postRepository, "delete").mockImplementation(async () => post);
-      jest
-        .spyOn(commentsRepository, "deleteCommentsByPostId")
-        .mockImplementation();
-      jest.spyOn(postRepository, "deleteCategoriesOnPost").mockImplementation();
+
       await expect(postService.delete(1, post.id)).resolves.toBe(post.id);
     });
     it("should call deleteFileQueue after delete post", async () => {
@@ -189,10 +192,7 @@ describe("PostService", function () {
         .spyOn(postRepository, "findById")
         .mockImplementation(async () => post);
       jest.spyOn(postRepository, "delete").mockImplementation(async () => post);
-      jest
-        .spyOn(commentsRepository, "deleteCommentsByPostId")
-        .mockImplementation();
-      jest.spyOn(postRepository, "deleteCategoriesOnPost").mockImplementation();
+
       await postService.delete(1, post.id);
       expect(queueDeleteFile.add).toBeCalledTimes(1);
     });
