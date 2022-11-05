@@ -52,8 +52,13 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-# 📝document
-swagger-ui
-> http://localhost:{port}/api
-> 
+# 📝documents
+
+### Database Diagram :
+- https://dbdiagram.io/d/636413aec9abfc6111702982
+
+
+### swagger-ui
+- http://localhost:{port}/api
+
 ![Swagger](/github/swagger.png)
