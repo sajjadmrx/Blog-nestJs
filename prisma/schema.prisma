@@ -55,9 +55,9 @@ model Category {
 }
 
 model CategoriesOnPosts {
-  post       Post     @relation(fields: [postId], references: [id])
+  post       Post     @relation(fields: [postId], references: [id],onDelete: Cascade, onUpdate: Cascade)
   postId     Int // relation scalar field (used in the `@relation` attribute above)
-  category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id],onDelete: Cascade, onUpdate: Cascade)
   categoryId Int // relation scalar field (used in the `@relation` attribute above)
   assignedAt DateTime @default(now())
 
@@ -67,13 +67,13 @@ model CategoriesOnPosts {
 model Comment {
   id        Int       @id @default(autoincrement())
   text      String
-  author    User      @relation(fields: [authorId], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  author    User      @relation(fields: [authorId], references: [id],onDelete: Cascade, onUpdate: Cascade )
   authorId  Int
-  post      Post      @relation(fields: [postId], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  post      Post      @relation(fields: [postId], references: [id],onDelete: Cascade, onUpdate: Cascade )
   postId    Int
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   replyId   Int?
-  reply     Comment?  @relation("replies", fields: [replyId], references: [id])
+  reply     Comment?  @relation("replies", fields: [replyId], references: [id],onDelete: Cascade, onUpdate: Cascade)
   childs    Comment[] @relation("replies") //https://www.prisma.io/docs/concepts/components/prisma-schema/relations/self-relations
 }

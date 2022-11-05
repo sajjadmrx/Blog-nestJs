@@ -1,9 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
-  UnauthorizedException,
 } from "@nestjs/common";
 import { CommentsRepository } from "./comments.repository";
 import { User } from "../../shared/interfaces/user.interface";
@@ -11,7 +9,6 @@ import { CommentCreateDto } from "./dtos/create.dto";
 import { getResponseMessage } from "../../shared/constants/messages.constant";
 import { PostRepository } from "../post/post.repository";
 import {
-  Comment,
   CommentWithChilds,
   CommentWithRelation,
 } from "../../shared/interfaces/comment.interface";
@@ -78,15 +75,13 @@ export class CommentsService {
     try {
       const comment: CommentWithChilds | null =
         await this.commentsRepository.getById(commentId);
+
       if (!comment)
         throw new NotFoundException(getResponseMessage("NOT_FOUND"));
 
       if (comment.authorId != user.id && !user.role.includes(Role.ADMIN)) {
         throw new ForbiddenException("PERMISSION_DENIED");
       }
-
-      if (comment.childs.length)
-        await this.commentsRepository.deleteChilds(commentId);
 
       await this.commentsRepository.deleteOne(comment.id);
 

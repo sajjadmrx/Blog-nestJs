@@ -31,18 +31,6 @@ export class CommentsRepository {
       },
     });
   }
-  async deleteChilds(pId: number): Promise<number> {
-    try {
-      const result: BatchPayload = await this.db.comment.deleteMany({
-        where: {
-          replyId: pId,
-        },
-      });
-      return result.count;
-    } catch (e) {
-      throw e;
-    }
-  }
 
   async deleteCommentsByPostId(postId: number): Promise<BatchPayload> {
     return this.db.comment.deleteMany({

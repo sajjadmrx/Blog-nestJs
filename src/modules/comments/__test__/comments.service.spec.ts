@@ -156,25 +156,6 @@ describe("CommentsService", function () {
         commentsService.delete(comment.id, { id: 9999, role: ["USER"] } as any)
       ).rejects.toThrow(new ForbiddenException("PERMISSION_DENIED"));
     });
-    it("should called deleteChilds,when comment include replies", async () => {
-      const child = comment;
-      child.id = 6;
-      child.replyId = comment.id;
-      const finallyComment: CommentWithChilds =
-        comment && ({ childs: [child] } as unknown as CommentWithChilds);
-
-      jest
-        .spyOn(commentsRepository, "getById")
-        .mockImplementation(async () => finallyComment);
-
-      jest.spyOn(commentsRepository, "deleteChilds").mockImplementation();
-
-      await expect(
-        commentsService.delete(comment.id, { role: ["ADMIN"], id: 1 } as any)
-      ).rejects.toThrow();
-
-      expect(commentsRepository.deleteChilds).toBeCalled();
-    });
     it("should called deleteOne & delete a comment", async () => {
       const finallyComment: CommentWithChilds =
         comment && ({ childs: [] } as unknown as CommentWithChilds);
