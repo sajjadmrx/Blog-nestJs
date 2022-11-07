@@ -13,11 +13,7 @@ export class CategoriesService {
   async getAll() {
     try {
       const categories = await this.categoriesRepository.find();
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-        data: categories,
-      });
+      return categories;
     } catch (error) {
       throw error;
     }
@@ -25,17 +21,10 @@ export class CategoriesService {
 
   async getById(id: number) {
     try {
-      if (!Number(id))
-        throw new BadRequestException(getResponseMessage("INVALID_ID"));
-
       const category = await this.categoriesRepository.findById(id);
       if (!category) throw new BadRequestException("Category not found");
 
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-        data: category,
-      });
+      return category;
     } catch (error) {
       throw error;
     }
@@ -46,11 +35,7 @@ export class CategoriesService {
       const category = await this.categoriesRepository.findBySlug(slug);
       if (!category) throw new BadRequestException("Category not found");
 
-      return responseData({
-        statusCode: "OK",
-        message: getResponseMessage("SUCCESS"),
-        data: category,
-      });
+      return category;
     } catch (error) {
       throw error;
     }
@@ -78,9 +63,6 @@ export class CategoriesService {
 
   async update(id: number, item: updateCategoryDto) {
     try {
-      if (!Number(id))
-        throw new BadRequestException(getResponseMessage("INVALID_ID"));
-
       const exist = await this.categoriesRepository.findBySlug(item.slug);
       if (exist && exist.id !== id)
         throw new BadRequestException(getResponseMessage("CATEGORY_EXIST"));
@@ -94,8 +76,6 @@ export class CategoriesService {
 
   async delete(id: number) {
     try {
-      if (!Number(id))
-        throw new BadRequestException(getResponseMessage("INVALID_ID"));
       const category = await this.categoriesRepository.findById(id);
       if (!category) throw new BadRequestException("Category not found");
 

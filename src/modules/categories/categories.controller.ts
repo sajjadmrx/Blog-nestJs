@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UseGuards,
@@ -42,8 +43,15 @@ export class CategoriesController {
   @ApiOperation({ summary: "get category by id" })
   @ApiOkResponse()
   @Get("/:id")
-  async getCategoryById(@Param("id") id: string) {
-    return this.categoriesService.getById(Number(id));
+  async getCategoryById(@Param("id", ParseIntPipe) id: number) {
+    return this.categoriesService.getById(id);
+  }
+
+  @ApiOperation({ summary: "get category by slug" })
+  @ApiOkResponse()
+  @Get("/s/:slug")
+  async getCategoryBySlug(@Param("slug") slug: string) {
+    return this.categoriesService.getBySlug(slug);
   }
 
   @ApiOperation({
@@ -68,9 +76,9 @@ export class CategoriesController {
   @UseGuards(authGuard(false))
   async updateCategory(
     @Body() item: updateCategoryDto,
-    @Param("id") id: string
+    @Param("id", ParseIntPipe) id: number
   ) {
-    return this.categoriesService.update(Number(id), item);
+    return this.categoriesService.update(id, item);
   }
 
   @ApiOperation({
@@ -82,7 +90,7 @@ export class CategoriesController {
   @UseGuards(CheckRoleGuard(["ADMIN"]))
   @UseGuards(authGuard(false))
   @ApiParam({ name: "id" })
-  async deleteCategory(@Param("id") id: string) {
-    return this.categoriesService.delete(Number(id));
+  async deleteCategory(@Param("id", ParseIntPipe) id: number) {
+    return this.categoriesService.delete(id);
   }
 }
