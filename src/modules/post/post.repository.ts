@@ -31,9 +31,13 @@ export class PostRepository {
           },
         },
         categories: {
-          include: {
+          select: {
+            postId: false,
+            categoryId: false,
+            assignedAt: false,
             category: {
               select: {
+                id: true,
                 name: true,
                 slug: true,
               },
@@ -58,6 +62,20 @@ export class PostRepository {
             role: true,
           },
         },
+        categories: {
+          select: {
+            postId: false,
+            categoryId: false,
+            assignedAt: false,
+            category: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -70,12 +88,12 @@ export class PostRepository {
     return this.prisma.post.create({ data: post });
   }
 
-  async update(id: number, post: PostUpdateInput): Promise<Post> {
+  async update(id: number, data: PostUpdateInput): Promise<Post> {
     return this.prisma.post.update({
       where: {
         id: id,
       },
-      data: post,
+      data: data,
     });
   }
 
