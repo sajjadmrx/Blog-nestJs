@@ -51,7 +51,7 @@ export class CommentsController {
     type: String,
     required: false,
   })
-  @ApiBearerAuth()
+  //  @ApiBearerAuth()
   @UseGuards(authGuard(true))
   @Get("")
   getAll(@Query() query: QueryDto, @getUser() user: User | null) {

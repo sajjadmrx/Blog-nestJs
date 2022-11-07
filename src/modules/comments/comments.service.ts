@@ -46,14 +46,17 @@ export class CommentsService {
   async create(data: CommentCreateDto, user: User) {
     try {
       const postId: number = data.postId;
+
       const hasPost = await this.postsRepository.findById(postId);
       if (!hasPost || !hasPost.published)
         throw new NotFoundException(getResponseMessage("POST_NOT_EXIST"));
+
       const replyId: number | null = data.replyId;
       if (replyId) {
         const hasComment: CommentWithChilds | null =
           await this.commentsRepository.getById(replyId);
-        if (!hasComment)
+
+        if (!hasComment || hasComment.postId != hasPost.id)
           throw new NotFoundException(
             getResponseMessage("REPLY_COMMENT_NOT_FOUND")
           );
@@ -65,6 +68,7 @@ export class CommentsService {
         text: data.text,
         authorId: user.id,
       });
+
       return comment.id;
     } catch (e) {
       throw e;

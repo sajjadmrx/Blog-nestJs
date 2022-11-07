@@ -10,7 +10,6 @@ import {
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
 import {
   ApiBearerAuth,
   ApiOkResponse,
