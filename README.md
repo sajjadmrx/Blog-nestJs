@@ -17,6 +17,7 @@
     <li> 🟦 TypeScript </li>
     <li> 😺 NestJS </li>
     <li> 📤 prisma.io(ORM) </li>
+    <li> 👷 GraphQl </li>
     <li> 🔃 Queue system </li>
     <li> 📒 Swagger </li>
     <li> 👤 JWT </li>
