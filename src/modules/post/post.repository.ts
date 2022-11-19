@@ -10,7 +10,11 @@ import { PrismaService } from "../prisma/prisma.service";
 export class PostRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findPublic(page: number, limit: number, query): Promise<Post[]> {
+  async findPublic(
+    page: number,
+    limit: number,
+    query: any = {}
+  ): Promise<Post[]> {
     return this.prisma.post.findMany({
       where: {
         ...query,
@@ -27,7 +31,7 @@ export class PostRepository {
             id: true,
             username: true,
             createdAt: true,
-            role: true,
+            updatedAt: true,
           },
         },
         categories: {

@@ -1,7 +1,11 @@
-export class searchPostDto {
+import { ArgsType, Field } from "@nestjs/graphql";
 
-    title: string;
-    content: string;
-    page: number;
-    limit: number;
+@ArgsType()
+export class searchPostDto {
+  @Field({ nullable: true })
+  title: string;
+  @Field({ nullable: true })
+  content: string;
+  page: number;
+  limit: number;
 }

@@ -1,5 +1,6 @@
 import { Field, ID, Int, ObjectType } from "@nestjs/graphql";
 import { Post } from "../../../shared/interfaces/post.interface";
+import { authorModel } from "./author.model";
 
 @ObjectType({
   description: "Post Model",
@@ -23,4 +24,6 @@ export class PostModel implements Post {
   updatedAt: Date;
   @Field((type) => String)
   tags: string;
+  @Field((type) => authorModel)
+  author: authorModel;
 }
