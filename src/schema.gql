@@ -2,6 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""Post Model"""
+type PostModel {
+  id: ID!
+  title: String!
+  content: String!
+  authorId: Int!
+  published: Boolean!
+  cover: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  tags: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Query {
-  sayHello: String!
+  all(page: Float!, limit: Float!): [PostModel!]!
 }
