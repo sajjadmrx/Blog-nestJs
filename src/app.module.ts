@@ -11,6 +11,9 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import Configuration from "./configuration";
 import { QueuesModule } from "./modules/queues/queues.module";
 import { CommentsModule } from "./modules/comments/comments.module";
+import { GraphQLModule } from "@nestjs/graphql";
+import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
+import { join } from "path";
 
 @Module({
   imports: [
@@ -27,6 +30,10 @@ import { CommentsModule } from "./modules/comments/comments.module";
     CategoriesModule,
     MailModule,
     CommentsModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), "src/schema.gql"),
+    }),
   ],
   controllers: [],
   providers: [],

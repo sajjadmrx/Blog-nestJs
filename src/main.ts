@@ -30,5 +30,12 @@ import { ConfigService } from "@nestjs/config";
 
   console.log(`Server running on ${port}`);
 
-  isDevelopmentMode && console.log(`http://localhost:${port}${DOCUMENT_ROUTE}`);
+  const appUrl: string = isDevelopmentMode
+    ? `http://127.0.0.1:${port}`
+    : await app.getUrl();
+
+  console.log(`GraphQl: ${appUrl}/graphql`);
+
+  isDevelopmentMode &&
+    console.log(`RestApi: http://localhost:${port}${DOCUMENT_ROUTE}`);
 })();
