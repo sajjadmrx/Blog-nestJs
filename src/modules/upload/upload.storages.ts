@@ -1,6 +1,5 @@
 import { diskStorage } from "multer";
 import { promises } from "fs";
-import path from "path";
 import BestString from "best-string";
 export function postStorage() {
   return diskStorage({

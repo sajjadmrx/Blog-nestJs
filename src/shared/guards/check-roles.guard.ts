@@ -9,7 +9,7 @@ import { User } from "../interfaces/user.interface";
 import { RoleType } from "../interfaces/role.interface";
 
 function CheckRoleGuard(roles: Array<RoleType>): any {
-  class _checkRoldGuard implements CanActivate {
+  class _checkRoleGuard implements CanActivate {
     constructor(private refactor: Reflector) {}
 
     canActivate(
@@ -23,7 +23,7 @@ function CheckRoleGuard(roles: Array<RoleType>): any {
       throw new ForbiddenException("PERMISSION_DENIED");
     }
   }
-  return _checkRoldGuard;
+  return _checkRoleGuard;
 }
 
 export default CheckRoleGuard;

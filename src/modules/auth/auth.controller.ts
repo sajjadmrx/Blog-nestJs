@@ -1,5 +1,5 @@
 import { Body, Controller, Post, UseInterceptors } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { SignInDto } from "src/modules/auth/dtos/signin.dto";
 import { AuthService } from "./auth.service";
 import { SignUpDto } from "./dtos/signup.dto";

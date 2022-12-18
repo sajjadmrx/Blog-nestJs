@@ -1,11 +1,8 @@
 import {
-  CanActivate,
   ExecutionContext,
-  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
 import { AuthGuard as _AuthGuard } from "@nestjs/passport";
 
 @Injectable()

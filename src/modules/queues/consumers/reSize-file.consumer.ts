@@ -1,14 +1,9 @@
-import {
-  OnQueueCompleted,
-  OnQueueError,
-  Process,
-  Processor,
-} from "@nestjs/bull";
+import { Process, Processor } from "@nestjs/bull";
 import { Job } from "bull";
 import { QueuesConstant } from "../../../shared/constants/queues.constant";
 import { ReSizeFileQueue } from "../../../shared/interfaces/queues.interface";
 import { ResizeService } from "../../upload/resize.service";
-import { unlink, writeFile, stat, mkdir } from "fs/promises";
+import { writeFile } from "fs/promises";
 
 @Processor(QueuesConstant.RESIZE_FILE)
 export class ReSizeFileConsumer {

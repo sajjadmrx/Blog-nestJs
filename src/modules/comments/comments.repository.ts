@@ -6,7 +6,6 @@ import {
   CommentWithChilds,
   CommentWithRelation,
 } from "../../shared/interfaces/comment.interface";
-import { Prisma } from "@prisma/client";
 import { BatchPayload } from "../../shared/interfaces/repository.interface";
 
 @Injectable()

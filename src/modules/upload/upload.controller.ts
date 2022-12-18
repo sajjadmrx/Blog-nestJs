@@ -1,12 +1,10 @@
 import {
-  BadRequestException,
   Controller,
   Post,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
   ApiBearerAuth,
@@ -14,8 +12,6 @@ import {
   ApiOperation,
   ApiTags,
 } from "@nestjs/swagger";
-import { diskStorage } from "multer";
-import { getResponseMessage } from "src/shared/constants/messages.constant";
 import { ApiFile } from "src/shared/decorators/api-File.decorator";
 import CheckRoleGuard from "src/shared/guards/check-roles.guard";
 import { postFilter } from "./filters/post.filter";

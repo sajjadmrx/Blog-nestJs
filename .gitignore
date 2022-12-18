@@ -40,3 +40,4 @@ db-data
 my-uploads
 .env
 pnpm-lock.yaml
+src/schema.gql

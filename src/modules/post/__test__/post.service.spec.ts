@@ -3,8 +3,8 @@ import { PostRepository } from "../post.repository";
 import { Post } from "../../../shared/interfaces/post.interface";
 import { BadRequestException } from "@nestjs/common";
 import { getResponseMessage } from "../../../shared/constants/messages.constant";
-import { fileHasExist } from "../../../shared/functions/fileValidator.func";
-import * as fileValidator from "../../../shared/functions/fileValidator.func";
+import { fileHasExist } from "../../../shared/utils/fileValidator.util";
+import * as fileValidator from "../../../shared/utils/fileValidator.util";
 import { CategoriesRepository } from "../../categories/categories.repository";
 import { CreatePostDto } from "../dtos/createPost.dto";
 

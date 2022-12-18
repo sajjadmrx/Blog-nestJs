@@ -10,9 +10,6 @@ import * as bcrypt from "bcrypt";
 import { SignUpDto } from "./dtos/signup.dto";
 import { JwtService } from "@nestjs/jwt";
 import { UsersRepository } from "../users/users.repository";
-import { responseData } from "src/shared/functions/response.func";
-import { getResponseMessage } from "src/shared/constants/messages.constant";
-import { MailService } from "../mail/mail.service";
 import { InjectQueue } from "@nestjs/bull";
 import { QueuesConstant } from "../../shared/constants/queues.constant";
 import { Queue } from "bull";
@@ -23,7 +20,6 @@ export class AuthService {
   constructor(
     private userRepository: UsersRepository,
     private jwtService: JwtService,
-    //private mailService: MailService,
     @InjectQueue(QueuesConstant.SEND_WELCOME_EMAIL)
     private queueSendWelcomeEmail: Queue<welcomeEmailQueue>
   ) {}
@@ -45,8 +41,7 @@ export class AuthService {
 
       const user = await this.userRepository.create(newUser);
 
-      // await this.mailService.sendWelcome(user);
-      this.queueSendWelcomeEmail.add({ user: user });
+      await this.queueSendWelcomeEmail.add({ user: user });
       return this.jwtSignUserId(user.id);
     } catch (error) {
       throw error;

@@ -1,8 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { getResponseMessage } from "src/shared/constants/messages.constant";
-import { responseData } from "src/shared/functions/response.func";
 import { ResizeService } from "./resize.service";
-import { unlink, writeFile, stat, mkdir } from "fs/promises";
+import { stat, mkdir } from "fs/promises";
 import { InjectQueue } from "@nestjs/bull";
 import { QueuesConstant } from "../../shared/constants/queues.constant";
 import { Queue } from "bull";

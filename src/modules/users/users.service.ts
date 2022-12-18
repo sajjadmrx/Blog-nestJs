@@ -1,14 +1,7 @@
-import {
-  BadRequestException,
-  HttpCode,
-  HttpStatus,
-  Injectable,
-  InternalServerErrorException,
-} from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { User } from "src/shared/interfaces/user.interface";
 import { UsersRepository } from "./users.repository";
 import { getResponseMessage } from "../../shared/constants/messages.constant";
-import { responseData } from "src/shared/functions/response.func";
 import { Role, RoleType } from "../../shared/interfaces/role.interface";
 
 @Injectable()

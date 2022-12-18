@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { getResponseMessage } from "src/shared/constants/messages.constant";
-import { responseData } from "src/shared/functions/response.func";
 import { CategoryCreateInput } from "src/shared/interfaces/categories.interface";
 import { CategoriesRepository } from "./categories.repository";
 import { CreateCategoryDto } from "./dtos/create.dto";
@@ -12,8 +11,7 @@ export class CategoriesService {
 
   async getAll() {
     try {
-      const categories = await this.categoriesRepository.find();
-      return categories;
+      return await this.categoriesRepository.find();
     } catch (error) {
       throw error;
     }

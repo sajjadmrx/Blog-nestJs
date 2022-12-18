@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { getResponseMessage } from "src/shared/constants/messages.constant";
-import { fileHasExist } from "src/shared/functions/fileValidator.func";
+import { fileHasExist } from "src/shared/utils/fileValidator.util";
 import {
   Post,
   PostCreateInput,

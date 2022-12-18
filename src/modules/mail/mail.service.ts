@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { MailerService } from "@nestjs-modules/mailer";
-import { MailSendInput } from "../../shared/interfaces/mail.interface";
 import { User } from "@prisma/client";
 import { MailConstant } from "../../shared/constants/mail.constant";
 

@@ -6,16 +6,12 @@ import {
   Param,
   Patch,
   Post,
-  Put,
   Query,
-  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
 import {
   ApiBearerAuth,
-  ApiConsumes,
   ApiOperation,
   ApiParam,
   ApiQuery,

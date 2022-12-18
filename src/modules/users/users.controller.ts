@@ -7,14 +7,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
-import {
-  ApiBadRequestResponse,
-  ApiBearerAuth,
-  ApiOperation,
-  ApiSecurity,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { getUser } from "src/shared/decorators/req-user.decorator";
 import CheckRoleGuard from "src/shared/guards/check-roles.guard";
 import { User } from "src/shared/interfaces/user.interface";
