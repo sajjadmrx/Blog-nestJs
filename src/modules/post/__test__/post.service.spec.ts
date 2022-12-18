@@ -7,6 +7,8 @@ import { fileHasExist } from "../../../shared/utils/fileValidator.util";
 import * as fileValidator from "../../../shared/utils/fileValidator.util";
 import { CategoriesRepository } from "../../categories/categories.repository";
 import { CreatePostDto } from "../dtos/createPost.dto";
+import { LoggingService } from "../../logging/logging.service";
+import { ConsoleLogger } from "../../logging/loggers/console.logger";
 
 let post: Post = {
   id: 1,
@@ -36,6 +38,7 @@ describe("PostService", function () {
   let postRepository: PostRepository;
   let categoriesRepository: CategoriesRepository;
   let queueDeleteFile;
+  let logger: LoggingService;
   beforeEach(() => {
     jest.clearAllMocks();
     postRepository = new PostRepository(jest.fn() as unknown as any);
@@ -45,11 +48,14 @@ describe("PostService", function () {
     queueDeleteFile = {
       add: jest.fn(),
     };
+    logger = new LoggingService(new ConsoleLogger());
     postService = new PostService(
       postRepository,
       categoriesRepository,
-      queueDeleteFile
+      queueDeleteFile,
+      logger
     );
+    jest.spyOn(logger, "error").mockImplementation();
   });
 
   it("should Defined", () => {

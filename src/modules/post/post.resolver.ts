@@ -4,9 +4,14 @@ import { PostRepository } from "./post.repository";
 import { searchPostDto } from "./dtos/search.dto";
 import { Post } from "../../shared/interfaces/post.interface";
 
+import { LoggingService } from "../logging/logging.service";
+
 @Resolver()
 export class PostResolver {
-  constructor(private postRepository: PostRepository) {}
+  constructor(
+    private postRepository: PostRepository,
+    private logging: LoggingService
+  ) {}
 
   @Query((returns) => [PostModel])
   async all(
@@ -14,15 +19,20 @@ export class PostResolver {
     @Args("limit", { nullable: false }) limit: number,
     @Args() args: searchPostDto
   ) {
-    const query = {
-      title: {
-        contains: args.title,
-      },
-      content: {
-        contains: args.content,
-      },
-    };
-    return this.postRepository.findPublic(page, limit, query);
+    try {
+      const query = {
+        title: {
+          contains: args.title,
+        },
+        content: {
+          contains: args.content,
+        },
+      };
+      return this.postRepository.findPublic(page, limit, query);
+    } catch (error: any) {
+      this.logging.error(error.message, error.stack);
+      throw error;
+    }
   }
   @Query((returns) => PostModel)
   async byId(

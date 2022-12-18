@@ -20,6 +20,7 @@ import { PostRepository } from "./post.repository";
 import { getCategoriesData } from "./post.utility";
 import { QueuesConstant } from "../../shared/constants/queues.constant";
 import { deleteFileQueue } from "../../shared/interfaces/queues.interface";
+import { LoggingService } from "../logging/logging.service";
 
 @Injectable()
 export class PostService {
@@ -27,7 +28,8 @@ export class PostService {
     private postRepository: PostRepository,
     private categoriesRepository: CategoriesRepository,
     @InjectQueue(QueuesConstant.DELETE_FILE)
-    private deleteFileQueue: Queue<deleteFileQueue>
+    private deleteFileQueue: Queue<deleteFileQueue>,
+    private logger: LoggingService
   ) {}
 
   async getPublicPosts(search: searchPostDto) {
@@ -51,7 +53,6 @@ export class PostService {
       const hasNext = page < pages;
       const hasPrev = page > 1;
       const nextPage = page + 1;
-
       return {
         posts,
         total,
@@ -60,7 +61,8 @@ export class PostService {
         hasPrev,
         nextPage,
       };
-    } catch (error) {
+    } catch (error: any) {
+      this.logger.error(error.message, error.stack);
       throw error;
     }
   }
@@ -72,7 +74,8 @@ export class PostService {
       if (!post || !post.published)
         throw new BadRequestException(getResponseMessage("POST_NOT_EXIST"));
       return post;
-    } catch (error) {
+    } catch (error: any) {
+      this.logger.error(error.message, error.stack);
       throw error;
     }
   }
@@ -98,7 +101,8 @@ export class PostService {
           throw new BadRequestException(
             getResponseMessage("CATEGORIES_NOT_EXIST")
           );
-      } catch (error) {
+      } catch (error: any) {
+        this.logger.error(error.message, error.stack);
         throw error;
       }
 
@@ -124,7 +128,8 @@ export class PostService {
       const post = await this.postRepository.create(postInput);
 
       return post;
-    } catch (error) {
+    } catch (error: any) {
+      this.logger.error(error.message, error.stack);
       throw error;
     }
   }
@@ -175,7 +180,8 @@ export class PostService {
       };
       await this.postRepository.update(id, data);
       return {};
-    } catch (error) {
+    } catch (error: any) {
+      this.logger.error(error.message, error.stack);
       throw error;
     }
   }
@@ -194,7 +200,8 @@ export class PostService {
         isFolder: false,
       });
       return post.id;
-    } catch (error) {
+    } catch (error: any) {
+      this.logger.error(error.message, error.stack);
       throw error;
     }
   }
