@@ -18,7 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "prisma:test:reset": "dotenv -e ./.env.test -- prisma migrate reset --force",
+    "test:e2e": "npm run prisma:test:reset && dotenv -e .env.test -- jest --config ./test/jest-e2e.config.ts"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",
@@ -40,6 +41,7 @@
     "chalk": "4.1.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "dotenv-cli": "^6.0.0",
     "graphql": "^16.6.0",
     "multer": "1.4.5-lts.1",
     "nanoid": "^3.3.4",
@@ -54,6 +56,7 @@
     "typeorm": "^0.2.44"
   },
   "devDependencies": {
+    "@jest/types": "^29.3.1",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.4.7",
@@ -64,7 +67,7 @@
     "@types/multer": "^1.4.7",
     "@types/node": "^16.0.0",
     "@types/sharp": "^0.30.2",
-    "@types/supertest": "^2.0.11",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",
@@ -75,7 +78,7 @@
     "prettier": "^2.3.2",
     "prisma": "^3.14.0",
     "source-map-support": "^0.5.20",
-    "supertest": "^6.1.3",
+    "supertest": "^6.2.4",
     "ts-jest": "^27.0.3",
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
