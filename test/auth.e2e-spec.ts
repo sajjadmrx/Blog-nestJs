@@ -3,6 +3,9 @@ import request from "supertest";
 import { runAndGetAppFixture } from "./fixtures/startapp.fixture";
 import { PrismaService } from "../src/modules/prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
+import { User } from "@prisma/client";
+import { createUserFixture } from "./fixtures/createUser.fixture";
+import { createJwtFixture } from "./fixtures/createJwt.fixture";
 
 describe("AuthController (e2e)", () => {
   let app: INestApplication;
@@ -14,12 +17,12 @@ describe("AuthController (e2e)", () => {
     jwtService = app.get<JwtService>(JwtService);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await prismaService.user.deleteMany();
     jest.clearAllMocks();
   });
 
   afterAll(async () => {
-    await prismaService.user.deleteMany();
     await app.close();
   });
 
@@ -56,6 +59,34 @@ describe("AuthController (e2e)", () => {
         });
       expect(response.body.data).toBe(fakeJwt);
       expect(response.statusCode).toBe(201);
+    });
+  });
+
+  describe("signing", function () {
+    let testUser: User;
+    let jwt: string;
+
+    beforeEach(async () => {
+      testUser = await createUserFixture(prismaService);
+      jwt = await createJwtFixture(app, testUser.id);
+    });
+
+    it("should response 401", async function () {
+      const response = await request(app.getHttpServer())
+        .post("/auth/signing")
+        .send({ username: testUser.username, password: "badPassword" });
+
+      expect(response.statusCode).toBe(401);
+    });
+    it("should response jwt token", async function () {
+      const fakeJwt: string = "test.test.test";
+      jest.spyOn(jwtService, "sign").mockReturnValue(fakeJwt);
+
+      const response = await request(app.getHttpServer())
+        .post("/auth/signing")
+        .send({ username: testUser.username, password: "hashedPassword" });
+      expect(response.body.data).toBe(fakeJwt);
+      expect(response.statusCode).toBe(200);
     });
   });
 });

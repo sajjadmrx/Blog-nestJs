@@ -20,6 +20,6 @@ export class SendWelcomeEmailConsumer {
 
   @OnQueueCompleted()
   logCompleted(job: Job<welcomeEmailQueue>) {
-    console.log(`Completed: ${job.id}`);
+    // console.log(`Completed: ${job.id}`);
   }
 }
