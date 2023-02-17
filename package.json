@@ -18,8 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "prisma:test:reset": "dotenv -e ./.env.test -- prisma migrate reset --force",
-    "test:e2e": "npm run prisma:test:reset && dotenv -e .env.test -- jest --config ./test/jest-e2e.config.ts"
+    "prisma:test:reset": "dotenv -e ./.env.test -- prisma migrate reset --force && dotenv -e ./.env.test -- prisma db push",
+    "test:e2e": "dotenv -e .env.test -- npx prisma db push && dotenv -e .env.test -- jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",

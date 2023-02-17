@@ -37,7 +37,8 @@ describe("AuthService", function () {
     authService = new AuthService(
       usersRepository,
       jwtService,
-      sendWelcomeEmailQueue
+      sendWelcomeEmailQueue,
+      jest.fn() as any
     );
   });
 

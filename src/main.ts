@@ -4,9 +4,9 @@ import { AppModule } from "./app.module";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { setupDocument } from "./document";
 import { ConfigService } from "@nestjs/config";
+import { Configs } from "./configuration";
 
 (async () => {
-  const port = process.env.PORT || 3000;
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useGlobalPipes(new ValidationPipe());
@@ -17,7 +17,9 @@ import { ConfigService } from "@nestjs/config";
     prefix: "/uploads/",
   });
 
-  const configService: ConfigService = new ConfigService();
+  const configService: ConfigService<Configs> = new ConfigService();
+
+  const port = configService.get<number>("PORT") || 3000;
 
   const isDevelopmentMode: boolean =
     configService.get<string>("APP_MODE").toUpperCase() == "DEVELOPMENT";

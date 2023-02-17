@@ -14,6 +14,8 @@ import { InjectQueue } from "@nestjs/bull";
 import { QueuesConstant } from "../../shared/constants/queues.constant";
 import { Queue } from "bull";
 import { welcomeEmailQueue } from "../../shared/interfaces/queues.interface";
+import { ConfigService } from "@nestjs/config";
+import { Configs } from "../../configuration";
 
 @Injectable()
 export class AuthService {
@@ -21,7 +23,8 @@ export class AuthService {
     private userRepository: UsersRepository,
     private jwtService: JwtService,
     @InjectQueue(QueuesConstant.SEND_WELCOME_EMAIL)
-    private queueSendWelcomeEmail: Queue<welcomeEmailQueue>
+    private queueSendWelcomeEmail: Queue<welcomeEmailQueue>,
+    private configService: ConfigService<Configs>
   ) {}
 
   async signUp(userDto: SignUpDto) {
@@ -69,6 +72,11 @@ export class AuthService {
   }
 
   private jwtSignUserId(userId: number): string {
-    return this.jwtService.sign({ userId });
+    return this.jwtService.sign(
+      { userId },
+      {
+        secret: this.configService.get("JWT_SECRET"),
+      }
+    );
   }
 }

@@ -1,8 +1,12 @@
+import { ConfigService } from "@nestjs/config";
+import { Configs } from "../../../configuration";
+
 const jwtConstant = {
-  secret: process.env.JWT_SECRET || 'secret',
+  getSecret: (configService: ConfigService<Configs>): string =>
+    configService.get<string>("JWT_SECRET"),
   signOptions: {
-    expiresIn: '1d',
-  }
-}
+    expiresIn: "1d",
+  },
+};
 
 export default jwtConstant;
