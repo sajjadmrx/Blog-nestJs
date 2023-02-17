@@ -48,4 +48,7 @@ describe("UsersController E2E", function () {
       expect(data).toEqual(testUser);
     });
   });
+  describe("Manage User", function() {
+
+  });
 });

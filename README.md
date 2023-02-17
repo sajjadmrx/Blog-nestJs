@@ -8,24 +8,26 @@
   <h1 align="center"> 
       Blog - NestJS
   </h1>   
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 
 ## ⚗️technologies
+
 <ul>
-    <li> 🟦 TypeScript </li>
-    <li> 😺 NestJS </li>
-    <li> 📤 prisma.io(ORM) </li>
-    <li> 👷 GraphQl </li>
-    <li> 🔃 Queue system </li>
+    <li> <img alt="ts"  src="https://skillicons.dev/icons?i=ts" width="20" height="20" /> TypeScript</li>
+    <li> <img alt="nest"  src="https://skillicons.dev/icons?i=nest" width="20" height="20" /> NestJS </li>
+    <li> <img alt="prisma"  src="https://skillicons.dev/icons?i=prisma" width="20" height="20" /> prisma.io(ORM) </li>
+    <li> <img alt="graphql"  src="https://skillicons.dev/icons?i=graphql" width="20" height="20" /> GraphQl </li>
+    <li> <img alt="rabbitmq"  src="https://skillicons.dev/icons?i=rabbitmq" width="20" height="20" /> Queue system </li>
     <li> 📒 Swagger </li>
-    <li> 👤 JWT </li>
     <li> 📧 Nodemailer </li>
-    <li> 🐬 Docker </li>
-    <li> 📦 Docker-Compose </li>
+    <li> <img alt="docker"  src="https://skillicons.dev/icons?i=docker" width="20" height="20" /> Docker & Docker-Compose </li>
+    <li> <img alt="jest"  src="https://skillicons.dev/icons?i=jest" width="20" height="20" />  Testing (Unit/E2E) </li>
 </ul>
 
+# 🤗 Easy To Run !!
+```bash
+# just run bash file
+$ ./config-env.sh
+```
 
 # 📦 Docker
 ```bash
@@ -52,6 +54,9 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+
+# e2e testing
+$ npm run test:e2e
 ```
 # 📝documents
 
