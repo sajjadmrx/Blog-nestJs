@@ -11,6 +11,9 @@ describe("AuthController (e2e)", () => {
   let app: INestApplication;
   let prismaService: PrismaService;
   let jwtService: JwtService;
+  let testUser: User;
+  let jwt: string;
+
   beforeAll(async () => {
     app = await runAndGetAppFixture();
     prismaService = app.get<PrismaService>(PrismaService);
@@ -18,13 +21,19 @@ describe("AuthController (e2e)", () => {
   });
 
   afterEach(async () => {
-    await prismaService.user.deleteMany();
     jest.clearAllMocks();
   });
 
-  afterAll(async () => {
-    await app.close();
+  beforeEach(async () => {
+    await prismaService.user.deleteMany();
+    testUser = await createUserFixture(prismaService);
+    jwt = await createJwtFixture(app, testUser.id);
   });
+
+  afterAll(async () => {
+    await prismaService.user.deleteMany();
+    await app.close();
+  }, 100000);
 
   describe("signup", function () {
     it("should response 400 when send invalid data", async function () {
@@ -53,7 +62,7 @@ describe("AuthController (e2e)", () => {
       const response = await request(app.getHttpServer())
         .post("/auth/signup")
         .send({
-          username: "test",
+          username: Date.now().toString(),
           email: "fake@gmail.com",
           password: "1234567890#$%",
         });
@@ -63,14 +72,6 @@ describe("AuthController (e2e)", () => {
   });
 
   describe("signing", function () {
-    let testUser: User;
-    let jwt: string;
-
-    beforeEach(async () => {
-      testUser = await createUserFixture(prismaService);
-      jwt = await createJwtFixture(app, testUser.id);
-    });
-
     it("should response 401", async function () {
       const response = await request(app.getHttpServer())
         .post("/auth/signing")

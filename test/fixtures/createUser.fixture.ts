@@ -8,8 +8,8 @@ export async function createUserFixture(
   const pass = await bcrypt.hash("hashedPassword", 10);
   return prismaService.user.create({
     data: {
-      username: "test",
-      email: "test@test.com",
+      username: Date.now().toString(),
+      email: `${Date.now().toString()}@gmail.com`,
       password: pass,
     },
   });
