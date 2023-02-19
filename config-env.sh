@@ -26,6 +26,8 @@ space 2
 read -p "Enter MySQL database name: " MYSQL_DATABASE
 read -p "Enter MySQL user: " MYSQL_USER
 read -p "Enter MySQL password: " MYSQL_PASSWORD
+read -p "Enter MySqL port(press Enter for default 3306):" MYSQL_PORT
+MYSQL_PORT=${MYSQL_PORT:-3306}
 MYSQL_ROOT_PASSWORD=$(openssl rand -base64 32)
 echo "generated Random password for root"
 space 3
@@ -40,24 +42,26 @@ echo "EMAIL_HOST=$EMAIL_HOST" >.env
 echo "EMAIL_PORT=$EMAIL_PORT" >>.env
 echo "EMAIL_USER=$EMAIL_USER" >>.env
 echo "EMAIL_PASS=$EMAIL_PASS" >>.env
-echo "DATABASE_URL=$DATABASE_URL" >>.env
+echo "DATABASE_URL=mysql://$MYSQL_USER:$MYSQL_PASSWORD@mysqldb:$MYSQL_PORT/$MYSQL_DATABASE" >>.env
 echo "REDIS_URL=$REDIS_URL" >>.env
 echo "PORT=$PORT" >>.env
 echo "APP_MODE=$APP_MODE" >>.env
 echo "MYSQL_USER=$MYSQL_USER" >>.env
 echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >>.env
 echo "MYSQL_DATABASE=$MYSQL_DATABASE" >>.env
+echo "MYSQL_PORT=$MYSQL_PORT" >>.env
 echo "MYSQL_ROOT_PASSWORD=$(openssl rand -hex 12)" >>.env
+echo "JWT_SECRET=$(openssl rand -hex 12)" >>.env
 echo "${green}Values saved to .env file${reset}"
 space 3
 
-read -p "Do you want to run 'docker-compose up -d' automatically? [y/n] " -r
+read -p "Do you want to run '${green}docker-compose  --profile product up -d${reset}' automatically? [y/n]: " REPLY
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     # Automatically run `docker-compose up -d`
-    docker-compose up -d
+    docker-compose --profile product up -d
 else
     # Prompt the user to run `docker-compose up -d` manually
-    echo "Run 'docker-compose up -d' manually to start the application. ${red}[Exiting...]${reset}"
+    echo "Run 'docker-compose  --profile product up -d' manually to start the application. ${red}[Exiting...]${reset}"
     sleep 3
 fi

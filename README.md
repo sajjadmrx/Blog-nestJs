@@ -31,7 +31,7 @@ $ ./config-env.sh
 
 # 📦 Docker
 ```bash
-docker-compose up -d
+docker-compose  --profile product up -d
 > Host port 5000
 ```
 

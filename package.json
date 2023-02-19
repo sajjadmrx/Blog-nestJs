@@ -33,7 +33,7 @@
     "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.2.1",
-    "@prisma/client": "^3.14.0",
+    "@prisma/client": "4.6.1",
     "apollo-server-express": "^3.11.1",
     "bcrypt": "^5.0.1",
     "best-string": "^1.0.0",
@@ -48,12 +48,14 @@
     "nodemailer": "^6.7.7",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
+    "prisma": "4.2.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "sharp": "^0.30.4",
     "swagger-ui-express": "^4.3.0",
-    "typeorm": "^0.2.44"
+    "typeorm": "^0.2.44",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@jest/types": "^29.3.1",
@@ -76,7 +78,6 @@
     "jest": "^27.2.5",
     "jest-mock-extended": "2.0.4",
     "prettier": "^2.3.2",
-    "prisma": "^3.14.0",
     "source-map-support": "^0.5.20",
     "supertest": "^6.2.4",
     "ts-jest": "^27.0.3",

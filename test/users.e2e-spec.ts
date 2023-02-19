@@ -18,12 +18,12 @@ describe("UsersController E2E", function () {
   });
 
   beforeEach(async () => {
-    await prismaService.user.deleteMany();
     testUser = await createUserFixture(prismaService);
     fakeJwt = await createJwtFixture(app, testUser.id);
   });
 
   afterEach(async () => {
+    await prismaService.user.deleteMany();
     jest.clearAllMocks();
   });
 
@@ -48,7 +48,37 @@ describe("UsersController E2E", function () {
       expect(data).toEqual(testUser);
     });
   });
-  describe("Manage User", function() {
+  describe("update user role by UserId", function () {
+    it("should response 403 for role permissions", async function () {
+      const response = await request(app.getHttpServer())
+        .put("/users/role/9999")
+        .set("Authorization", `Bearer ${fakeJwt}`);
+      expect(response.statusCode).toBe(403);
+    });
+    it("should update user role", async function () {
+      const targetUser: User = await createUserFixture(prismaService);
+      await prismaService.user.updateMany({
+        where: { id: testUser.id },
+        data: { role: "ADMIN" },
+      });
 
+      const response = await request(app.getHttpServer())
+        .put(`/users/role/${targetUser.id}`)
+        .set("Authorization", `Bearer ${fakeJwt}`)
+        .send({ name: "ADMIN" });
+      expect(response.statusCode).toBe(200);
+    });
+    it("should response INVALID_USER_ID when set invalid userId", async function () {
+      await prismaService.user.updateMany({
+        where: { id: testUser.id },
+        data: { role: "ADMIN" },
+      });
+
+      const response = await request(app.getHttpServer())
+        .put(`/users/role/${0}`)
+        .set("Authorization", `Bearer ${fakeJwt}`)
+        .send({ name: "ADMIN" });
+      expect(response.body.message).toBe("INVALID_USER_ID");
+    });
   });
 });

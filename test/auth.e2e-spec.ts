@@ -20,18 +20,17 @@ describe("AuthController (e2e)", () => {
     jwtService = app.get<JwtService>(JwtService);
   });
 
-  afterEach(async () => {
-    jest.clearAllMocks();
-  });
-
   beforeEach(async () => {
-    await prismaService.user.deleteMany();
     testUser = await createUserFixture(prismaService);
     jwt = await createJwtFixture(app, testUser.id);
   });
 
+  afterEach(async () => {
+    await prismaService.user.deleteMany({ where: { id: testUser.id } });
+    jest.clearAllMocks();
+  });
+
   afterAll(async () => {
-    await prismaService.user.deleteMany();
     await app.close();
   }, 100000);
 
