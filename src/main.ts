@@ -7,7 +7,9 @@ import { ConfigService } from "@nestjs/config";
 import { Configs } from "./configuration";
 
 (async () => {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: true,
+  });
 
   app.useGlobalPipes(new ValidationPipe());
 
