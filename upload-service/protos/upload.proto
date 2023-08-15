@@ -1,18 +1,33 @@
 syntax = "proto3";
 
-
 package UploadPackage;
 
+option go_package = ".";
 
-service UploadService {
-   rpc upload(stream FileChunk) returns (UploadStatus);
+service Upload {
+
+  rpc UploadImage(UploadImageRequest) returns (UploadImageResponse);
+
+  rpc GetAllMedia(GetAllMediaRequest) returns (GetAllMediaResponse);
+
 }
 
-message FileChunk{
-   bytes content = 1;
+message UploadImageRequest {
+  bytes image = 1;
+  string  filename = 2;
 }
 
-message UploadStatus {
-   string message = 1;
+message UploadImageResponse {
+  string imageUrl = 1;
 }
 
+message GetAllMediaRequest {
+}
+
+message GetAllMediaResponse {
+  repeated Image media = 1;
+}
+
+message Image {
+  string url = 1;
+}

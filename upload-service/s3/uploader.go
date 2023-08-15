@@ -1,21 +1,18 @@
 package s3
 
 import (
+	"bytes"
 	"context"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"mime/multipart"
+	"log"
 	"os"
 )
 
-type MLogger interface {
-	Fatal(input ...any)
-}
-
-func UploadToS3(logger MLogger, filename string, src multipart.File) (string, error) {
+func UploadToS3(filename string, src *bytes.Reader) (string, error) {
 	cfg, err := config.LoadDefaultConfig(
 		context.TODO(),
 		config.WithEndpointResolverWithOptions(aws.EndpointResolverWithOptionsFunc(
@@ -29,7 +26,7 @@ func UploadToS3(logger MLogger, filename string, src multipart.File) (string, er
 			"")),
 	)
 	if err != nil {
-		logger.Fatal(err)
+		log.Fatal(err)
 		return "", err
 	}
 
@@ -44,7 +41,7 @@ func UploadToS3(logger MLogger, filename string, src multipart.File) (string, er
 	})
 
 	if err != nil {
-		logger.Fatal(err)
+		log.Fatal(err)
 		return "", err
 	}
 
