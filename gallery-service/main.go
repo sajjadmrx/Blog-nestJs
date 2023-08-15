@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
+	mongoDB "gallery-service/internal/db/mongo"
+	"gallery-service/internal/server"
 	"github.com/joho/godotenv"
 	"log"
-	mongoDB "upload-service/internal/db/mongo"
-	"upload-service/internal/server"
 )
 
 var (

@@ -3,14 +3,14 @@ package handlers
 import (
 	"bytes"
 	"context"
+	mongoDB "gallery-service/internal/db/mongo"
+	pb "gallery-service/out_protos/protos"
+	"gallery-service/s3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"log"
 	"time"
-	mongoDB "upload-service/internal/db/mongo"
-	pb "upload-service/out_protos/protos"
-	"upload-service/s3"
 )
 
 type UploadServer struct {

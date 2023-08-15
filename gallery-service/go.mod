@@ -1,4 +1,4 @@
-module upload-service
+module gallery-service
 
 go 1.19
 

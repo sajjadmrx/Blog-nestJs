@@ -2,11 +2,11 @@ package server
 
 import (
 	"fmt"
+	handlers "gallery-service/internal/server/handler"
+	pb "gallery-service/out_protos/protos"
 	"google.golang.org/grpc"
 	"log"
 	"net"
-	handlers "upload-service/internal/server/handler"
-	pb "upload-service/out_protos/protos"
 )
 
 func Run(port string) {
